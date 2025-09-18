@@ -1,0 +1,56 @@
+{
+  "name": "aegora-frontend",
+  "version": "1.0.0",
+  "description": "Aegora Frontend DApp",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "next": "^14.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "ethers": "^6.8.1",
+    "wagmi": "^1.4.7",
+    "@rainbow-me/rainbowkit": "^1.3.0",
+    "@tanstack/react-query": "^4.35.0",
+    "axios": "^1.6.0",
+    "react-hook-form": "^7.47.0",
+    "react-hot-toast": "^2.4.1",
+    "framer-motion": "^10.16.0",
+    "lucide-react": "^0.292.0",
+    "clsx": "^2.0.0",
+    "tailwind-merge": "^2.0.0",
+    "@headlessui/react": "^1.7.17",
+    "react-markdown": "^9.0.1",
+    "recharts": "^2.8.0",
+    "date-fns": "^2.30.0",
+    "react-dropzone": "^14.2.3",
+    "react-copy-to-clipboard": "^5.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "typescript": "^5.2.0",
+    "tailwindcss": "^3.3.0",
+    "autoprefixer": "^10.4.0",
+    "postcss": "^8.4.0",
+    "eslint": "^8.52.0",
+    "eslint-config-next": "^14.0.0"
+  },
+  "keywords": [
+    "react",
+    "nextjs",
+    "web3",
+    "dapp",
+    "arbitration",
+    "defi"
+  ],
+  "author": "Aegora Team",
+  "license": "MIT"
+}
