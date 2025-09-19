@@ -94,6 +94,40 @@ export default function GovernancePage() {
     }
   };
 
+  const handleCreateProposal = async (e) => {
+    e.preventDefault();
+    
+    if (!isConnected) {
+      alert('Please connect your wallet first');
+      return;
+    }
+
+    const formData = new FormData(e.target);
+    const proposalData = {
+      type: formData.get('proposalType'),
+      title: formData.get('title'),
+      description: formData.get('description'),
+      targetContract: formData.get('targetContract') || null,
+      calldata: formData.get('calldata') || null,
+      proposer: address
+    };
+
+    try {
+      // This would call the governance contract to create a proposal
+      console.log('Creating proposal:', proposalData);
+      
+      // For now, we'll simulate success
+      alert('Proposal created successfully! (This is a demo - actual contract interaction would happen here)');
+      setShowCreateModal(false);
+      
+      // Refresh proposals list
+      fetchProposals();
+    } catch (error) {
+      console.error('Error creating proposal:', error);
+      alert('Error creating proposal: ' + error.message);
+    }
+  };
+
   const getStatusColor = (status) => {
     switch (status) {
       case 'Active':
@@ -438,6 +472,131 @@ export default function GovernancePage() {
               </div>
             </div>
           </div>
+
+          {/* Create Proposal Modal */}
+          {showCreateModal && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                className="bg-white rounded-lg p-6 w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto"
+              >
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-2xl font-bold text-gray-900">Create New Proposal</h2>
+                  <button
+                    onClick={() => setShowCreateModal(false)}
+                    className="text-gray-400 hover:text-gray-600"
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+
+                <form onSubmit={handleCreateProposal} className="space-y-6">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Proposal Type
+                    </label>
+                    <select
+                      name="proposalType"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      required
+                    >
+                      <option value="">Select proposal type</option>
+                      <option value="ParameterUpdate">Parameter Update</option>
+                      <option value="ContractUpgrade">Contract Upgrade</option>
+                      <option value="TreasuryManagement">Treasury Management</option>
+                      <option value="IntegrationApproval">Integration Approval</option>
+                      <option value="EmergencyAction">Emergency Action</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Proposal Title
+                    </label>
+                    <input
+                      name="title"
+                      type="text"
+                      placeholder="e.g., Increase Escrow Fee to 0.5%"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Description
+                    </label>
+                    <textarea
+                      name="description"
+                      placeholder="Describe your proposal in detail..."
+                      rows={6}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Target Contract Address (Optional)
+                    </label>
+                    <input
+                      name="targetContract"
+                      type="text"
+                      placeholder="0x..."
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Calldata (Optional)
+                    </label>
+                    <textarea
+                      name="calldata"
+                      placeholder="Function call data (hex encoded)..."
+                      rows={3}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm"
+                    />
+                  </div>
+
+                  <div className="bg-blue-50 p-4 rounded-lg">
+                    <div className="flex items-start space-x-3">
+                      <AlertTriangle className="w-5 h-5 text-blue-600 mt-0.5" />
+                      <div>
+                        <h4 className="font-medium text-blue-900">Proposal Requirements</h4>
+                        <ul className="text-sm text-blue-800 mt-1 space-y-1">
+                          <li>• You need at least 1,000 AEG tokens to create a proposal</li>
+                          <li>• Proposals require a 4% quorum to pass</li>
+                          <li>• Voting period is 3 days</li>
+                          <li>• Execution delay is 1 day after proposal passes</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex space-x-4">
+                    <button
+                      type="button"
+                      onClick={() => setShowCreateModal(false)}
+                      className="flex-1 px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    >
+                      Create Proposal
+                    </button>
+                  </div>
+                </form>
+              </motion.div>
+            </div>
+          )}
         </div>
       </div>
     </>

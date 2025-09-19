@@ -2,9 +2,9 @@
 
 export const config = {
   // U2U Network Configuration
-  chainId: process.env.NEXT_PUBLIC_CHAIN_ID || '39',
-  rpcUrl: process.env.NEXT_PUBLIC_RPC_URL || 'https://rpc.u2u.xyz',
-  explorerUrl: process.env.NEXT_PUBLIC_EXPLORER_URL || 'https://explorer.u2u.xyz',
+  chainId: process.env.NEXT_PUBLIC_CHAIN_ID || '2484', // U2U Network Nebulas Testnet
+  rpcUrl: process.env.NEXT_PUBLIC_RPC_URL || 'https://rpc-nebulas-testnet.u2u.xyz',
+  explorerUrl: process.env.NEXT_PUBLIC_EXPLORER_URL || 'https://nebulas-testnet-explorer.u2u.xyz',
   
   // Contract Addresses
   contracts: {

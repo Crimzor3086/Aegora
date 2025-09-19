@@ -52,6 +52,55 @@ app.get('/health', (req, res) => {
   });
 });
 
+// Mock data endpoints (for development without database)
+app.get('/api/escrow/stats/overview', (req, res) => {
+  res.json({
+    success: true,
+    data: {
+      total: 0,
+      active: 0,
+      completed: 0,
+      disputed: 0,
+      byStatus: []
+    }
+  });
+});
+
+app.get('/api/disputes/stats/overview', (req, res) => {
+  res.json({
+    success: true,
+    data: {
+      total: 0,
+      pending: 0,
+      resolved: 0,
+      byStatus: []
+    }
+  });
+});
+
+app.get('/api/reputation/stats/overview', (req, res) => {
+  res.json({
+    success: true,
+    data: {
+      totalUsers: 0,
+      averageScore: 0,
+      topPerformers: []
+    }
+  });
+});
+
+app.get('/api/escrow', (req, res) => {
+  res.json({
+    success: true,
+    data: [],
+    pagination: {
+      limit: 20,
+      offset: 0,
+      total: 0
+    }
+  });
+});
+
 // API routes
 app.use('/api/disputes', disputeRoutes);
 app.use('/api/escrow', escrowRoutes);
@@ -104,9 +153,13 @@ process.on('SIGINT', () => {
 // Start server
 async function startServer() {
   try {
-    // Connect to database
-    await db.connect();
-    logger.info('Database connected successfully');
+    // Connect to database (optional for development)
+    try {
+      await db.connect();
+      logger.info('Database connected successfully');
+    } catch (dbError) {
+      logger.warn('Database connection failed, running in mock mode:', dbError.message);
+    }
     
     // Start server
     app.listen(PORT, () => {

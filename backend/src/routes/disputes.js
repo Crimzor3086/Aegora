@@ -3,7 +3,7 @@ const router = express.Router();
 const Dispute = require('../db/models/Dispute');
 const User = require('../db/models/User');
 const Reputation = require('../db/models/Reputation');
-const ipfsService = require('../services/ipfsService');
+// const ipfsService = require('../services/ipfsService'); // Temporarily disabled
 const logger = require('../utils/logger');
 
 // Get all disputes

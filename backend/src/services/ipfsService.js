@@ -1,4 +1,4 @@
-const { create } = require('ipfs-http-client');
+// const { create } = require('ipfs-http-client'); // Temporarily disabled due to package issues
 const logger = require('../utils/logger');
 
 class IPFSService {

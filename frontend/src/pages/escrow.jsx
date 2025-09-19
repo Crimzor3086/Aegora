@@ -113,6 +113,49 @@ export default function EscrowPage() {
     }
   };
 
+  const handleCreateEscrow = async (e) => {
+    e.preventDefault();
+    
+    if (!isConnected) {
+      alert('Please connect your wallet first');
+      return;
+    }
+
+    const formData = new FormData(e.target);
+    const sellerAddress = formData.get('sellerAddress');
+    const amount = formData.get('amount');
+    const description = formData.get('description');
+
+    try {
+      const response = await fetch('/api/escrow', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          buyer: address,
+          seller: sellerAddress,
+          amount: parseFloat(amount),
+          description: description || '',
+          termsHash: 'QmExampleTermsHash' // This would be uploaded to IPFS
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        alert('Escrow created successfully!');
+        setShowCreateModal(false);
+        fetchEscrows(); // Refresh the list
+      } else {
+        alert('Error creating escrow: ' + data.message);
+      }
+    } catch (error) {
+      console.error('Error creating escrow:', error);
+      alert('Error creating escrow');
+    }
+  };
+
   const stats = {
     total: escrows.length,
     active: escrows.filter(e => e.status === 'Active').length,
@@ -291,6 +334,87 @@ export default function EscrowPage() {
                   />
                 </motion.div>
               ))}
+            </div>
+          )}
+
+          {/* Create Escrow Modal */}
+          {showCreateModal && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                className="bg-white rounded-lg p-6 w-full max-w-md mx-4"
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-xl font-bold text-gray-900">Create New Escrow</h2>
+                  <button
+                    onClick={() => setShowCreateModal(false)}
+                    className="text-gray-400 hover:text-gray-600"
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+
+                <form onSubmit={handleCreateEscrow} className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Seller Address
+                    </label>
+                    <input
+                      name="sellerAddress"
+                      type="text"
+                      placeholder="0x..."
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Amount (ETH)
+                    </label>
+                    <input
+                      name="amount"
+                      type="number"
+                      step="0.001"
+                      placeholder="0.1"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Description
+                    </label>
+                    <textarea
+                      name="description"
+                      placeholder="Describe the goods or services..."
+                      rows={3}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                  </div>
+
+                  <div className="flex space-x-4">
+                    <button
+                      type="button"
+                      onClick={() => setShowCreateModal(false)}
+                      className="flex-1 px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    >
+                      Create Escrow
+                    </button>
+                  </div>
+                </form>
+              </motion.div>
             </div>
           )}
         </div>

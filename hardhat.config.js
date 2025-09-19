@@ -29,6 +29,12 @@ module.exports = {
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
       gasPrice: "auto",
     },
+    u2uNebulasTestnet: {
+      url: "https://rpc-nebulas-testnet.u2u.xyz",
+      chainId: 2484,
+      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
+      gasPrice: "auto",
+    },
   },
   etherscan: {
     apiKey: {
@@ -49,6 +55,14 @@ module.exports = {
         urls: {
           apiURL: "https://testnet-explorer.u2u.xyz/api",
           browserURL: "https://testnet-explorer.u2u.xyz",
+        },
+      },
+      {
+        network: "u2uNebulasTestnet",
+        chainId: 2484,
+        urls: {
+          apiURL: "https://nebulas-testnet-explorer.u2u.xyz/api",
+          browserURL: "https://nebulas-testnet-explorer.u2u.xyz",
         },
       },
     ],

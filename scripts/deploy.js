@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path");
 
 async function main() {
-  console.log("Starting Aegora deployment on U2U network...");
+  console.log("Starting Aegora deployment on U2U Network Nebulas testnet...");
 
   // Get the deployer account
   const [deployer] = await ethers.getSigners();
@@ -91,8 +91,8 @@ async function main() {
 
   // Save deployment info
   const deploymentInfo = {
-    network: "u2u",
-    chainId: 39,
+    network: "u2uNebulasTestnet",
+    chainId: 2484,
     deployer: deployer.address,
     timestamp: new Date().toISOString(),
     contracts: {
@@ -136,7 +136,7 @@ async function main() {
   };
 
   // Save to file
-  const deploymentPath = path.join(__dirname, "../deployments/u2u.json");
+  const deploymentPath = path.join(__dirname, "../deployments/u2u-nebulas-testnet.json");
   const deploymentDir = path.dirname(deploymentPath);
   
   if (!fs.existsSync(deploymentDir)) {
@@ -148,7 +148,7 @@ async function main() {
 
   // Create .env file for frontend
   const envContent = `
-# Aegora Contract Addresses (U2U Network)
+# Aegora Contract Addresses (U2U Network Nebulas Testnet)
 NEXT_PUBLIC_TOKEN_AEG_ADDRESS=${tokenAEGAddress}
 NEXT_PUBLIC_ESCROW_CONTRACT_ADDRESS=${escrowContractAddress}
 NEXT_PUBLIC_DISPUTE_CONTRACT_ADDRESS=${disputeContractAddress}
@@ -157,9 +157,9 @@ NEXT_PUBLIC_GOVERNANCE_CONTRACT_ADDRESS=${governanceContractAddress}
 NEXT_PUBLIC_TIMELOCK_CONTROLLER_ADDRESS=${timelockControllerAddress}
 
 # Network Configuration
-NEXT_PUBLIC_CHAIN_ID=39
-NEXT_PUBLIC_RPC_URL=https://rpc.u2u.xyz
-NEXT_PUBLIC_EXPLORER_URL=https://explorer.u2u.xyz
+NEXT_PUBLIC_CHAIN_ID=2484
+NEXT_PUBLIC_RPC_URL=https://rpc-nebulas-testnet.u2u.xyz
+NEXT_PUBLIC_EXPLORER_URL=https://nebulas-testnet-explorer.u2u.xyz
 `;
 
   const envPath = path.join(__dirname, "../.env.local");
@@ -176,7 +176,7 @@ NEXT_PUBLIC_EXPLORER_URL=https://explorer.u2u.xyz
   console.log("GovernanceContract:", governanceContractAddress);
   
   console.log("\nNext steps:");
-  console.log("1. Verify contracts on U2U explorer");
+  console.log("1. Verify contracts on U2U Network Nebulas testnet explorer");
   console.log("2. Update frontend environment variables");
   console.log("3. Deploy backend API");
   console.log("4. Test the complete system");
