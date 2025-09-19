@@ -13,6 +13,7 @@
     "backend:dev": "cd backend && npm run dev",
     "dev": "concurrently \"npm run backend:dev\" \"npm run frontend:dev\"",
     "build": "npm run compile && cd frontend && npm run build",
+    "build:frontend": "cd frontend && npm run build",
     "subgraph:codegen": "cd subgraph && graph codegen",
     "subgraph:build": "cd subgraph && graph build",
     "subgraph:deploy": "cd subgraph && graph deploy --node https://api.thegraph.com/deploy/ aegora-subgraph"
@@ -31,6 +32,7 @@
   "license": "MIT",
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^3.0.0",
+    "@openzeppelin/hardhat-upgrades": "^1.28.0",
     "hardhat": "^2.19.0",
     "concurrently": "^8.2.2"
   },

@@ -1,0 +1,33 @@
+# Ignore development files
+node_modules/
+backend/
+contracts/
+scripts/
+test/
+subgraph/
+.env
+.env.local
+.env.*.local
+*.log
+cache/
+artifacts/
+typechain-types/
+
+# Ignore IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+
+# Ignore Git
+.git/
+.gitignore
+
+# Ignore documentation
+docs/
+README.md
+QUICKSTART.md
