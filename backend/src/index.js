@@ -13,6 +13,7 @@ const logger = require('./utils/logger');
 const disputeRoutes = require('./routes/disputes');
 const escrowRoutes = require('./routes/escrow');
 const reputationRoutes = require('./routes/reputation');
+const jurorRoutes = require('./routes/jurors');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -101,10 +102,25 @@ app.get('/api/escrow', (req, res) => {
   });
 });
 
+app.get('/api/jurors/stats/overview', (req, res) => {
+  res.json({
+    success: true,
+    data: {
+      active: 0,
+      inactive: 0,
+      total: 0,
+      totalStake: 0,
+      avgReputation: 0,
+      avgAccuracy: 0
+    }
+  });
+});
+
 // API routes
 app.use('/api/disputes', disputeRoutes);
 app.use('/api/escrow', escrowRoutes);
 app.use('/api/reputation', reputationRoutes);
+app.use('/api/jurors', jurorRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
