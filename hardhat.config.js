@@ -10,7 +10,14 @@ module.exports = {
       optimizer: {
         enabled: true,
         runs: 200,
+        details: {
+          yul: true,
+          yulDetails: {
+            stackAllocation: true
+          }
+        }
       },
+      viaIR: true
     },
   },
   networks: {

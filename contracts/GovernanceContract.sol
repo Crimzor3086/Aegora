@@ -233,7 +233,7 @@ contract GovernanceContract is
      * @param proposalId ID of the proposal
      */
     function getProposalState(uint256 proposalId) external view returns (
-        uint8 state,
+        uint8 proposalState,
         ProposalMetadata memory metadata
     ) {
         return (uint8(state(proposalId)), proposalMetadata[proposalId]);
@@ -300,6 +300,18 @@ contract GovernanceContract is
         }
         
         return result;
+    }
+    
+    /**
+     * @dev Returns the total number of proposals ever created (by highest proposalId in proposalMetadata)
+     */
+    function proposalCount() public view returns (uint256) {
+        // proposalIds start from 1, so we iterate until we find the first missing proposal
+        uint256 count = 0;
+        while (proposalMetadata[count + 1].createdAt != 0) {
+            count++;
+        }
+        return count;
     }
     
     /**

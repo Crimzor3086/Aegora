@@ -40,7 +40,7 @@ contract ReputationContract is ERC721, ERC721Enumerable, ERC721URIStorage, Ownab
     mapping(uint256 => string) public reputationTiers;
     
     // Events
-    event ReputationUpdated(address indexed user, uint256 newScore, uint256 change);
+    event ReputationUpdated(address indexed user, uint256 newScore, int256 change);
     event ArbitrationRecordAdded(address indexed user, uint256 disputeId, bool wasJuror, bool won);
     event ReputationTierUpdated(uint256 tier, string name);
     
@@ -74,7 +74,7 @@ contract ReputationContract is ERC721, ERC721Enumerable, ERC721URIStorage, Ownab
         rep.lastUpdated = block.timestamp;
         rep.isActive = true;
         
-        emit ReputationUpdated(user, rep.score, success ? 10 : -5);
+        emit ReputationUpdated(user, rep.score, success ? int256(10) : int256(-5));
         
         // Mint or update SBT
         _updateSBT(user);
@@ -128,7 +128,7 @@ contract ReputationContract is ERC721, ERC721Enumerable, ERC721URIStorage, Ownab
         rep.isActive = true;
         
         emit ArbitrationRecordAdded(user, disputeId, wasJuror, won);
-        emit ReputationUpdated(user, rep.score, won ? (wasJuror ? 25 : 15) : (wasJuror ? -10 : -5));
+        emit ReputationUpdated(user, rep.score, won ? (wasJuror ? int256(25) : int256(15)) : (wasJuror ? int256(-10) : int256(-5)));
         
         // Mint or update SBT
         _updateSBT(user);
