@@ -1,5 +1,9 @@
 # Aegora – The Decentralized Arbitration & Trust Marketplace
+
+
 contract address 0x7c538b83D0295f94C4bBAf8302095d9ED4b2Ad5f
+
+
 Aegora is a decentralized arbitration and reputation protocol designed to solve the problem of trust in peer-to-peer digital interactions.
 
 ## 🌟 Overview
