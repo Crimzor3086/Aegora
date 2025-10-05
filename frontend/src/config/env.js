@@ -17,8 +17,8 @@ export const config = {
   },
   
   // External Services
-  walletConnectProjectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || 'your-walletconnect-project-id',
-  alchemyId: process.env.NEXT_PUBLIC_ALCHEMY_ID || '',
+  walletConnectProjectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || null,
+  alchemyId: process.env.NEXT_PUBLIC_ALCHEMY_ID || null,
   
   // API Configuration
   apiUrl: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001',

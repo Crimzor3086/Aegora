@@ -90,18 +90,6 @@ app.get('/api/reputation/stats/overview', (req, res) => {
   });
 });
 
-app.get('/api/escrow', (req, res) => {
-  res.json({
-    success: true,
-    data: [],
-    pagination: {
-      limit: 20,
-      offset: 0,
-      total: 0
-    }
-  });
-});
-
 app.get('/api/jurors/stats/overview', (req, res) => {
   res.json({
     success: true,

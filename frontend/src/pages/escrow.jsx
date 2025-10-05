@@ -14,11 +14,13 @@ import {
 } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import EscrowCard from '../components/EscrowCard';
+import config from '../config/env';
 
 export default function EscrowPage() {
   const { address, isConnected } = useAccount();
   const [escrows, setEscrows] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [errorMsg, setErrorMsg] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -30,7 +32,12 @@ export default function EscrowPage() {
   const fetchEscrows = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/escrow');
+      setErrorMsg('');
+      const response = await fetch(`${config.apiUrl}/api/escrow`);
+      if (!response.ok) {
+        const text = await response.text();
+        throw new Error(text || `Request failed with status ${response.status}`);
+      }
       const data = await response.json();
       
       if (data.success) {
@@ -38,6 +45,7 @@ export default function EscrowPage() {
       }
     } catch (error) {
       console.error('Error fetching escrows:', error);
+      setErrorMsg('Failed to load escrows. Is the backend and MongoDB running?');
     } finally {
       setLoading(false);
     }
@@ -61,7 +69,7 @@ export default function EscrowPage() {
 
   const handleConfirmEscrow = async (escrowId) => {
     try {
-      const response = await fetch(`/api/escrow/${escrowId}/confirm`, {
+      const response = await fetch(`${config.apiUrl}/api/escrow/${escrowId}/confirm`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -87,7 +95,7 @@ export default function EscrowPage() {
 
   const handleDisputeEscrow = async (escrowId) => {
     try {
-      const response = await fetch(`/api/escrow/${escrowId}/dispute`, {
+      const response = await fetch(`${config.apiUrl}/api/escrow/${escrowId}/dispute`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -127,7 +135,7 @@ export default function EscrowPage() {
     const description = formData.get('description');
 
     try {
-      const response = await fetch('/api/escrow', {
+      const response = await fetch(`${config.apiUrl}/api/escrow`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -174,6 +182,11 @@ export default function EscrowPage() {
         <Navbar />
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          {errorMsg && (
+            <div className="mb-6 rounded-md border border-red-200 bg-red-50 p-4 text-red-800">
+              {errorMsg}
+            </div>
+          )}
           {/* Header */}
           <div className="flex items-center justify-between mb-8">
             <div>

@@ -162,9 +162,14 @@ NEXT_PUBLIC_RPC_URL=https://rpc-nebulas-testnet.u2u.xyz
 NEXT_PUBLIC_EXPLORER_URL=https://nebulas-testnet-explorer.u2u.xyz
 `;
 
-  const envPath = path.join(__dirname, "../.env.local");
-  fs.writeFileSync(envPath, envContent);
-  console.log("Environment variables saved to:", envPath);
+  const rootEnvPath = path.join(__dirname, "../.env.local");
+  fs.writeFileSync(rootEnvPath, envContent);
+  console.log("Environment variables saved to:", rootEnvPath);
+
+  // Also write to frontend/.env.local so Next.js picks up values
+  const frontendEnvPath = path.join(__dirname, "../frontend/.env.local");
+  fs.writeFileSync(frontendEnvPath, envContent);
+  console.log("Environment variables saved to:", frontendEnvPath);
 
   console.log("\n✅ Deployment completed successfully!");
   console.log("\nContract Addresses:");

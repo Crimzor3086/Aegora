@@ -33,19 +33,25 @@ const u2uNebulasTestnet = {
   },
 };
 
+const providers = [];
+if (config.alchemyId) {
+  providers.push(alchemyProvider({ apiKey: config.alchemyId }));
+}
+providers.push(publicProvider());
+
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [u2uNebulasTestnet, mainnet, polygon, arbitrum, optimism],
-  [
-    alchemyProvider({ apiKey: config.alchemyId }),
-    publicProvider(),
-  ]
+  [u2uNebulasTestnet],
+  providers
 );
 
-const { connectors } = getDefaultWallets({
+const walletOptions = {
   appName: config.appName,
-  projectId: config.walletConnectProjectId,
   chains,
-});
+};
+if (config.walletConnectProjectId) {
+  walletOptions.projectId = config.walletConnectProjectId;
+}
+const { connectors } = getDefaultWallets(walletOptions);
 
 const wagmiConfig = createConfig({
   autoConnect: true,
