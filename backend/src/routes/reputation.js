@@ -8,18 +8,28 @@ const logger = require('../utils/logger');
 router.get('/:address', async (req, res) => {
   try {
     const reputation = await Reputation.findByUser(req.params.address);
-    
+    // If no reputation record exists yet, return a sensible default object
     if (!reputation) {
-      return res.status(404).json({
-        success: false,
-        message: 'Reputation not found'
+      const defaultRep = {
+        user: req.params.address.toLowerCase(),
+        score: 0,
+        tier: 'Newcomer',
+        transactions: { total: 0, successful: 0, failed: 0 },
+        arbitrations: { participated: 0, won: 0, lost: 0 },
+        badges: [],
+        history: [],
+        lastUpdated: new Date(),
+        createdAt: new Date()
+      };
+
+      return res.json({
+        success: true,
+        data: defaultRep,
+        message: 'Default reputation returned (no record found)'
       });
     }
-    
-    res.json({
-      success: true,
-      data: reputation
-    });
+
+    res.json({ success: true, data: reputation });
   } catch (error) {
     logger.error('Error fetching reputation:', error);
     res.status(500).json({

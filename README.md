@@ -75,33 +75,26 @@ Aegora solves this with a borderless, transparent, decentralized arbitration cou
 ### Installation
 
 1. **Clone the repository**
-   ```bash
-   git clone https://github.com/aegora/aegora.git
-   cd aegora
-   ```
+   See `RUNNING_LOCALLY.md` for copy-paste commands to clone and prepare the repository.
 
 2. **Install dependencies**
-   ```bash
-   npm install
-   cd frontend && npm install
-   cd ../backend && npm install
-   ```
+
+   See `RUNNING_LOCALLY.md` for exact install commands for root, frontend and backend dependencies.
 
 3. **Set up environment variables**
-   ```bash
-   cp .env.example .env
-   # Edit .env with your configuration
-   ```
+
+   See `RUNNING_LOCALLY.md` for example env file locations and recommended variables to set.
 
 4. **Deploy smart contracts**
-   ```bash
-   npm run deploy:u2u
-   ```
+
+   Deployment commands and smart-contract steps are documented in `RUNNING_LOCALLY.md`.
 
 5. **Start the development servers**
-   ```bash
-   npm run dev
-   ```
+
+   Start-up commands for the full development stack (frontend, backend, and MongoDB) are in `RUNNING_LOCALLY.md`.
+
+> For a concise, copy-paste friendly set of commands to run the whole stack locally (frontend, backend, MongoDB, and optional contract steps), see `RUNNING_LOCALLY.md` in the repo root.
+
 
 ## 📁 Project Structure
 
@@ -135,53 +128,19 @@ aegora/
 
 ### Smart Contracts
 
-```bash
-# Compile contracts
-npm run compile
-
-# Run tests
-npm run test
-
-# Deploy to U2U testnet
-npm run deploy:testnet
-
-# Deploy to U2U mainnet
-npm run deploy:u2u
-```
+See `RUNNING_LOCALLY.md` for quick copy-paste commands to compile, test, and deploy contracts.
 
 ### Frontend
 
-```bash
-cd frontend
-npm run dev          # Start development server
-npm run build        # Build for production
-npm run start        # Start production server
-```
+Frontend run/build/start commands are documented in `RUNNING_LOCALLY.md` (copy-paste friendly).
 
 ### Backend
 
-```bash
-cd backend
-npm run dev          # Start development server
-npm run start        # Start production server
-npm test            # Run tests
-```
+Backend run/build/start/test commands are documented in `RUNNING_LOCALLY.md`.
 
 ## 🧪 Testing
 
-```bash
-# Run all tests
-npm test
-
-# Run smart contract tests
-npm run test:contracts
-
-# Run backend tests
-cd backend && npm test
-
-# Run frontend tests
-cd frontend && npm test
-```
+See `RUNNING_LOCALLY.md` for example test commands and how to run each component's tests.
 
 ## 📚 Documentation
 

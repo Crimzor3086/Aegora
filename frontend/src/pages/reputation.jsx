@@ -12,10 +12,13 @@ import {
   Shield,
   TrendingUp,
   CheckCircle,
-  AlertTriangle
+  AlertTriangle,
+  Scale,
+  Gavel
 } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import ReputationBadge from '../components/ReputationBadge';
+import config from '../config/env';
 
 export default function ReputationPage() {
   const { address, isConnected } = useAccount();
@@ -35,7 +38,7 @@ export default function ReputationPage() {
   const fetchReputations = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/reputation/leaderboard/top?limit=50');
+      const response = await fetch(`${config.apiUrl}/api/reputation/leaderboard/top?limit=50`);
       const data = await response.json();
       
       if (data.success) {
@@ -50,7 +53,7 @@ export default function ReputationPage() {
 
   const fetchUserReputation = async () => {
     try {
-      const response = await fetch(`/api/reputation/${address}`);
+      const response = await fetch(`${config.apiUrl}/api/reputation/${address}`);
       const data = await response.json();
       
       if (data.success) {
@@ -86,6 +89,14 @@ export default function ReputationPage() {
   };
 
   const LeaderboardCard = ({ reputation, rank }) => {
+    const successRate = reputation.transactions?.total > 0 
+      ? ((reputation.transactions.successful / reputation.transactions.total) * 100).toFixed(1)
+      : '0.0';
+    
+    const arbitrationRate = reputation.arbitrations?.participated > 0
+      ? ((reputation.arbitrations.won / reputation.arbitrations.participated) * 100).toFixed(1)
+      : '0.0';
+
     return (
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -117,9 +128,7 @@ export default function ReputationPage() {
           </div>
           <div>
             <p className="text-gray-600">Success Rate</p>
-            <p className="font-medium text-gray-900">
-              {reputation.successRate?.toFixed(1) || 0}%
-            </p>
+            <p className="font-medium text-gray-900">{successRate}%</p>
           </div>
           <div>
             <p className="text-gray-600">Arbitrations</p>
@@ -127,9 +136,7 @@ export default function ReputationPage() {
           </div>
           <div>
             <p className="text-gray-600">Arbitration Rate</p>
-            <p className="font-medium text-gray-900">
-              {reputation.arbitrationSuccessRate?.toFixed(1) || 0}%
-            </p>
+            <p className="font-medium text-gray-900">{arbitrationRate}%</p>
           </div>
         </div>
       </motion.div>
@@ -176,7 +183,12 @@ export default function ReputationPage() {
                     </div>
                     <div>
                       <p className="text-blue-100">Success Rate</p>
-                      <p className="font-bold">{userReputation.successRate?.toFixed(1) || 0}%</p>
+                      <p className="font-bold">
+                        {userReputation.transactions?.total > 0 
+                          ? ((userReputation.transactions.successful / userReputation.transactions.total) * 100).toFixed(1)
+                          : '0.0'
+                        }%
+                      </p>
                     </div>
                     <div>
                       <p className="text-blue-100">Arbitrations</p>
@@ -263,34 +275,112 @@ export default function ReputationPage() {
 
           {/* Reputation Tiers Info */}
           <div className="bg-white rounded-lg shadow-sm p-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Reputation Tiers</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Reputation Tiers & Juror Requirements</h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-6">
               {[
-                { tier: 'Newcomer', min: 0, max: 99, icon: Shield, color: 'text-gray-500' },
-                { tier: 'Trusted', min: 100, max: 499, icon: Star, color: 'text-green-500' },
-                { tier: 'Expert', min: 500, max: 999, icon: Award, color: 'text-blue-500' },
-                { tier: 'Master', min: 1000, max: 1999, icon: Trophy, color: 'text-purple-500' },
-                { tier: 'Legend', min: 2000, max: Infinity, icon: Crown, color: 'text-yellow-500' }
+                { 
+                  tier: 'Newcomer', 
+                  min: 0, 
+                  max: 99, 
+                  icon: Shield, 
+                  color: 'text-gray-500',
+                  description: 'New to the platform',
+                  jurorEligible: false
+                },
+                { 
+                  tier: 'Trusted', 
+                  min: 100, 
+                  max: 499, 
+                  icon: Star, 
+                  color: 'text-green-500',
+                  description: 'Proven track record',
+                  jurorEligible: false
+                },
+                { 
+                  tier: 'Expert', 
+                  min: 500, 
+                  max: 999, 
+                  icon: Award, 
+                  color: 'text-blue-500',
+                  description: 'Experienced arbitrator',
+                  jurorEligible: false
+                },
+                { 
+                  tier: 'Master', 
+                  min: 1000, 
+                  max: 1999, 
+                  icon: Trophy, 
+                  color: 'text-purple-500',
+                  description: 'Senior arbitrator',
+                  jurorEligible: false
+                },
+                { 
+                  tier: 'Legend', 
+                  min: 2000, 
+                  max: Infinity, 
+                  icon: Crown, 
+                  color: 'text-yellow-500',
+                  description: 'Elite arbitrator',
+                  jurorEligible: true
+                }
               ].map((tierInfo, index) => (
                 <motion.div
                   key={tierInfo.tier}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
-                  className="text-center"
+                  className={`text-center p-4 rounded-lg border-2 ${
+                    tierInfo.jurorEligible 
+                      ? 'border-yellow-200 bg-yellow-50' 
+                      : 'border-gray-200 bg-gray-50'
+                  }`}
                 >
                   <div className={`w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center`}>
                     <tierInfo.icon className={`w-8 h-8 ${tierInfo.color}`} />
                   </div>
                   <h3 className="text-lg font-semibold text-gray-900 mb-2">{tierInfo.tier}</h3>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-gray-600 mb-2">
                     {tierInfo.max === Infinity 
                       ? `${tierInfo.min}+ points`
                       : `${tierInfo.min}-${tierInfo.max} points`
                     }
                   </p>
+                  <p className="text-xs text-gray-500 mb-2">{tierInfo.description}</p>
+                  {tierInfo.jurorEligible && (
+                    <div className="flex items-center justify-center space-x-1 text-xs text-yellow-700">
+                      <Gavel className="w-3 h-3" />
+                      <span>Juror Eligible</span>
+                    </div>
+                  )}
                 </motion.div>
               ))}
+            </div>
+            
+            {/* Juror Requirements */}
+            <div className="mt-8 p-6 bg-blue-50 rounded-lg border border-blue-200">
+              <div className="flex items-start space-x-3">
+                <Scale className="w-6 h-6 text-blue-600 mt-1" />
+                <div>
+                  <h3 className="text-lg font-semibold text-blue-900 mb-2">Become a Juror</h3>
+                  <p className="text-blue-800 text-sm mb-3">
+                    To participate in dispute resolution and earn rewards, you need:
+                  </p>
+                  <ul className="text-blue-800 text-sm space-y-1">
+                    <li className="flex items-center space-x-2">
+                      <CheckCircle className="w-4 h-4 text-green-600" />
+                      <span>Minimum 2000 AEG tokens in your wallet</span>
+                    </li>
+                    <li className="flex items-center space-x-2">
+                      <CheckCircle className="w-4 h-4 text-green-600" />
+                      <span>Legend tier reputation (2000+ points)</span>
+                    </li>
+                    <li className="flex items-center space-x-2">
+                      <CheckCircle className="w-4 h-4 text-green-600" />
+                      <span>Active participation in the community</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </div>
           </div>
         </div>

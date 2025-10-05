@@ -80,10 +80,10 @@ router.post('/register', async (req, res) => {
       });
     }
     
-    if (stake < 1000) {
+    if (stake < 2000) {
       return res.status(400).json({
         success: false,
-        message: 'Minimum stake required is 1000 AEG tokens'
+        message: 'Minimum stake required is 2000 AEG tokens'
       });
     }
     
@@ -93,6 +93,29 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({
         success: false,
         message: 'Address is already registered as a juror'
+      });
+    }
+    
+    // Validate AEG token balance on-chain
+    try {
+      const tokenAddress = process.env.TOKEN_AEG_ADDRESS || '0xc5645f895a48c8A572368AaFeaAb2D42d1203819';
+      const rpcUrl = process.env.RPC_URL || 'https://rpc-nebulas-testnet.u2u.xyz';
+      
+      const balanceInfo = await getAEGBalance(address, tokenAddress, rpcUrl);
+      
+      if (balanceInfo.formatted < 2000) {
+        return res.status(400).json({
+          success: false,
+          message: `Insufficient AEG balance. Required: 2000 AEG, Available: ${balanceInfo.formatted.toFixed(2)} AEG`
+        });
+      }
+      
+      logger.info(`AEG balance verified for ${address}: ${balanceInfo.formatted} AEG`);
+    } catch (balanceError) {
+      logger.error('Error verifying AEG balance:', balanceError);
+      return res.status(500).json({
+        success: false,
+        message: 'Failed to verify AEG token balance. Please try again.'
       });
     }
     
@@ -181,10 +204,10 @@ router.put('/stake', async (req, res) => {
       });
     }
     
-    if (newStake < 1000) {
+    if (newStake < 2000) {
       return res.status(400).json({
         success: false,
-        message: 'Minimum stake required is 1000 AEG tokens'
+        message: 'Minimum stake required is 2000 AEG tokens'
       });
     }
     
