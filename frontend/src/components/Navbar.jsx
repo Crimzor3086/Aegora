@@ -1,20 +1,43 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { useAccount, usePublicClient } from 'wagmi';
 import { Menu, X, Shield, Scale, Users, Settings } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import config from '../config/env';
+import { fetchErc20Balance } from '../utils/ethers';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
+  const { address } = useAccount();
+  const publicClient = usePublicClient();
+  const [aegBalance, setAegBalance] = useState(null);
 
   const navigation = [
     { name: 'Escrow', href: '/escrow', icon: Shield },
     { name: 'Disputes', href: '/disputes', icon: Scale },
     { name: 'Reputation', href: '/reputation', icon: Users },
     { name: 'Governance', href: '/governance', icon: Settings },
+    { name: 'P2P', href: '/p2p', icon: DollarIcon },
   ];
+
+  function DollarIcon(props) {
+    return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className={`w-4 h-4 ${props.className||''}`}><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-4 0-4 6 0 6s4 6 0 6m0-18v2m0 14v2"/></svg>;
+  }
+
+  useEffect(() => {
+    let cancelled = false;
+    async function load() {
+      if (!address || !config.contracts.tokenAEG) { setAegBalance(null); return; }
+      const bal = await fetchErc20Balance({ publicClient, tokenAddress: config.contracts.tokenAEG, owner: address });
+      if (!cancelled) setAegBalance(bal);
+    }
+    load();
+    const id = setInterval(load, 15000);
+    return () => { cancelled = true; clearInterval(id); };
+  }, [address, publicClient]);
 
   const isActive = (href) => router.pathname === href;
 
@@ -50,8 +73,13 @@ const Navbar = () => {
             ))}
           </div>
 
-          {/* Connect Button */}
-          <div className="hidden md:flex items-center">
+          {/* Connect + Balance */}
+          <div className="hidden md:flex items-center space-x-4">
+            {aegBalance && (
+              <div className="text-sm text-gray-700">
+                AEG: <span className="font-semibold">{aegBalance.formatted}</span>
+              </div>
+            )}
             <ConnectButton />
           </div>
 

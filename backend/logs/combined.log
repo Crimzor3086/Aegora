@@ -277,3 +277,26 @@
 {"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m::1 - - [05/Oct/2025:22:04:56 +0000] \"GET /api/jurors/0xd332ABE4395c5173E04F4cbBF39DB175C23ad0eC HTTP/1.1\" 200 380 \"http://localhost:3000/\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\"\u001b[39m","timestamp":"2025-10-05 18:04:56:456"}
 {"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m::1 - - [05/Oct/2025:22:04:56 +0000] \"GET /api/disputes HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\"\u001b[39m","timestamp":"2025-10-05 18:04:56:456"}
 {"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m::1 - - [05/Oct/2025:22:04:56 +0000] \"GET /api/jurors/0xd332ABE4395c5173E04F4cbBF39DB175C23ad0eC HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\"\u001b[39m","timestamp":"2025-10-05 18:04:56:456"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mJuror unregistered: 0xd332ABE4395c5173E04F4cbBF39DB175C23ad0eC\u001b[39m","timestamp":"2025-10-05 18:05:52:552"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m::1 - - [05/Oct/2025:22:05:52 +0000] \"POST /api/jurors/unregister HTTP/1.1\" 200 428 \"http://localhost:3000/\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\"\u001b[39m","timestamp":"2025-10-05 18:05:52:552"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m::1 - - [05/Oct/2025:22:08:44 +0000] \"GET /api/escrow HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\"\u001b[39m","timestamp":"2025-10-05 18:08:44:844"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m::1 - - [05/Oct/2025:22:08:44 +0000] \"GET /api/escrow HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\"\u001b[39m","timestamp":"2025-10-05 18:08:44:844"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m::1 - - [05/Oct/2025:22:08:48 +0000] \"GET /api/escrow HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\"\u001b[39m","timestamp":"2025-10-05 18:08:48:848"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mConnected to MongoDB\u001b[39m","timestamp":"2025-10-05 18:09:42:942"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mDatabase connected successfully\u001b[39m","timestamp":"2025-10-05 18:09:42:942"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mAegora Backend API server running on port 3001\u001b[39m","timestamp":"2025-10-05 18:09:42:942"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mEnvironment: development\u001b[39m","timestamp":"2025-10-05 18:09:42:942"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mConnected to MongoDB\u001b[39m","timestamp":"2025-10-05 18:10:01:101"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mDatabase connected successfully\u001b[39m","timestamp":"2025-10-05 18:10:01:101"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mAegora Backend API server running on port 3001\u001b[39m","timestamp":"2025-10-05 18:10:01:101"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mEnvironment: development\u001b[39m","timestamp":"2025-10-05 18:10:01:101"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mConnected to MongoDB\u001b[39m","timestamp":"2025-10-05 18:10:07:107"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mDatabase connected successfully\u001b[39m","timestamp":"2025-10-05 18:10:07:107"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mAegora Backend API server running on port 3001\u001b[39m","timestamp":"2025-10-05 18:10:07:107"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mEnvironment: development\u001b[39m","timestamp":"2025-10-05 18:10:07:107"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m::1 - - [05/Oct/2025:22:10:15 +0000] \"GET /api/escrow HTTP/1.1\" 200 - \"http://localhost:3000/\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\"\u001b[39m","timestamp":"2025-10-05 18:10:15:1015"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m::1 - - [05/Oct/2025:22:10:15 +0000] \"GET /api/escrow HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\"\u001b[39m","timestamp":"2025-10-05 18:10:15:1015"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mConnected to MongoDB\u001b[39m","timestamp":"2025-10-05 18:12:29:1229"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mDatabase connected successfully\u001b[39m","timestamp":"2025-10-05 18:12:29:1229"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mAegora Backend API server running on port 3001\u001b[39m","timestamp":"2025-10-05 18:12:29:1229"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mEnvironment: development\u001b[39m","timestamp":"2025-10-05 18:12:29:1229"}

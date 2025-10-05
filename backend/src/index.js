@@ -14,6 +14,7 @@ const disputeRoutes = require('./routes/disputes');
 const escrowRoutes = require('./routes/escrow');
 const reputationRoutes = require('./routes/reputation');
 const jurorRoutes = require('./routes/jurors');
+const p2pRoutes = require('./routes/p2p');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -109,6 +110,7 @@ app.use('/api/disputes', disputeRoutes);
 app.use('/api/escrow', escrowRoutes);
 app.use('/api/reputation', reputationRoutes);
 app.use('/api/jurors', jurorRoutes);
+app.use('/api/p2p', p2pRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
