@@ -14,32 +14,32 @@ async function main() {
   console.log("\n1. Deploying TokenAEG...");
   const TokenAEG = await ethers.getContractFactory("TokenAEG");
   const tokenAEG = await TokenAEG.deploy();
-  await tokenAEG.waitForDeployment();
-  const tokenAEGAddress = await tokenAEG.getAddress();
+  await tokenAEG.deployed();
+  const tokenAEGAddress = tokenAEG.address;
   console.log("TokenAEG deployed to:", tokenAEGAddress);
 
   // Deploy EscrowContract
   console.log("\n2. Deploying EscrowContract...");
   const EscrowContract = await ethers.getContractFactory("EscrowContract");
   const escrowContract = await EscrowContract.deploy();
-  await escrowContract.waitForDeployment();
-  const escrowContractAddress = await escrowContract.getAddress();
+  await escrowContract.deployed();
+  const escrowContractAddress = escrowContract.address;
   console.log("EscrowContract deployed to:", escrowContractAddress);
 
   // Deploy DisputeContract
   console.log("\n3. Deploying DisputeContract...");
   const DisputeContract = await ethers.getContractFactory("DisputeContract");
   const disputeContract = await DisputeContract.deploy(tokenAEGAddress);
-  await disputeContract.waitForDeployment();
-  const disputeContractAddress = await disputeContract.getAddress();
+  await disputeContract.deployed();
+  const disputeContractAddress = disputeContract.address;
   console.log("DisputeContract deployed to:", disputeContractAddress);
 
   // Deploy ReputationContract
   console.log("\n4. Deploying ReputationContract...");
   const ReputationContract = await ethers.getContractFactory("ReputationContract");
   const reputationContract = await ReputationContract.deploy();
-  await reputationContract.waitForDeployment();
-  const reputationContractAddress = await reputationContract.getAddress();
+  await reputationContract.deployed();
+  const reputationContractAddress = reputationContract.address;
   console.log("ReputationContract deployed to:", reputationContractAddress);
 
   // Deploy TimelockController for governance
@@ -51,8 +51,8 @@ async function main() {
     [deployer.address], // executors
     deployer.address // admin
   );
-  await timelockController.waitForDeployment();
-  const timelockControllerAddress = await timelockController.getAddress();
+  await timelockController.deployed();
+  const timelockControllerAddress = timelockController.address;
   console.log("TimelockController deployed to:", timelockControllerAddress);
 
   // Deploy GovernanceContract
@@ -63,11 +63,11 @@ async function main() {
     timelockControllerAddress,
     1, // voting delay (1 block)
     17280, // voting period (3 days)
-    ethers.parseEther("1000000"), // proposal threshold (1M AEG)
+    ethers.utils.parseEther("1000000"), // proposal threshold (1M AEG)
     4 // quorum percentage (4%)
   );
-  await governanceContract.waitForDeployment();
-  const governanceContractAddress = await governanceContract.getAddress();
+  await governanceContract.deployed();
+  const governanceContractAddress = governanceContract.address;
   console.log("GovernanceContract deployed to:", governanceContractAddress);
 
   // Set up permissions
@@ -86,7 +86,7 @@ async function main() {
   console.log("Added deployer as minter for TokenAEG");
 
   // Add escrow contract as allowed token (for ETH)
-  await escrowContract.addAllowedToken(ethers.ZeroAddress);
+  await escrowContract.addAllowedToken(ethers.constants.AddressZero);
   console.log("Added ETH as allowed token in escrow contract");
 
   // Save deployment info
@@ -128,7 +128,7 @@ async function main() {
           timelockControllerAddress,
           1,
           17280,
-          ethers.parseEther("1000000"),
+          ethers.utils.parseEther("1000000"),
           4
         ]
       }
