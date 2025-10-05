@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Juror = require('../db/models/Juror');
 const logger = require('../utils/logger');
+const { getAEGBalance } = require('../utils/ethers');
 
 // Get all active jurors
 router.get('/', async (req, res) => {
