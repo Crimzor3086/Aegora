@@ -18,6 +18,7 @@ import {
   XCircle
 } from 'lucide-react';
 import Navbar from '../components/Navbar';
+import config from '../config/env';
 
 export default function DisputesPage() {
   const { address, isConnected } = useAccount();
@@ -31,6 +32,7 @@ export default function DisputesPage() {
   const [isRegistering, setIsRegistering] = useState(false);
   const [currentJuror, setCurrentJuror] = useState(null);
   const [jurorStats, setJurorStats] = useState(null);
+  const [errorMsg, setErrorMsg] = useState('');
 
   useEffect(() => {
     fetchDisputes();
@@ -43,7 +45,12 @@ export default function DisputesPage() {
   const fetchDisputes = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/disputes');
+      setErrorMsg('');
+      const response = await fetch(`${config.apiUrl}/api/disputes`);
+      if (!response.ok) {
+        const text = await response.text();
+        throw new Error(text || `Request failed with status ${response.status}`);
+      }
       const data = await response.json();
       
       if (data.success) {
@@ -51,6 +58,7 @@ export default function DisputesPage() {
       }
     } catch (error) {
       console.error('Error fetching disputes:', error);
+      setErrorMsg('Failed to load disputes. Is the backend and MongoDB running?');
     } finally {
       setLoading(false);
     }
@@ -58,7 +66,8 @@ export default function DisputesPage() {
 
   const fetchJurorStats = async () => {
     try {
-      const response = await fetch('/api/jurors/stats/overview');
+      const response = await fetch(`${config.apiUrl}/api/jurors/stats/overview`);
+      if (!response.ok) return;
       const data = await response.json();
       
       if (data.success) {
@@ -86,7 +95,8 @@ export default function DisputesPage() {
 
   const checkJurorStatus = async () => {
     try {
-      const response = await fetch(`/api/jurors/${address}`);
+      const response = await fetch(`${config.apiUrl}/api/jurors/${address}`);
+      if (!response.ok) return setCurrentJuror(null);
       const data = await response.json();
       
       if (data.success) {
@@ -113,7 +123,7 @@ export default function DisputesPage() {
 
     try {
       setIsRegistering(true);
-      const response = await fetch('/api/jurors/register', {
+      const response = await fetch(`${config.apiUrl}/api/jurors/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -154,7 +164,7 @@ export default function DisputesPage() {
 
     try {
       setIsRegistering(true);
-      const response = await fetch('/api/jurors/unregister', {
+      const response = await fetch(`${config.apiUrl}/api/jurors/unregister`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -182,7 +192,7 @@ export default function DisputesPage() {
 
   const handleVote = async (disputeId, vote) => {
     try {
-      const response = await fetch(`/api/disputes/${disputeId}/vote`, {
+      const response = await fetch(`${config.apiUrl}/api/disputes/${disputeId}/vote`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -349,6 +359,11 @@ export default function DisputesPage() {
         <Navbar />
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          {errorMsg && (
+            <div className="mb-6 rounded-md border border-red-200 bg-red-50 p-4 text-red-800">
+              {errorMsg}
+            </div>
+          )}
           {/* Header */}
           <div className="flex items-center justify-between mb-8">
             <div>
