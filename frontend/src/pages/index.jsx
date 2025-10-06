@@ -14,6 +14,7 @@ import {
   Zap
 } from 'lucide-react';
 import Navbar from '../components/Navbar';
+import config from '../config/env';
 import EscrowCard from '../components/EscrowCard';
 import ReputationBadge from '../components/ReputationBadge';
 
@@ -31,9 +32,9 @@ export default function Home() {
     const fetchStats = async () => {
       try {
         const [escrowRes, disputeRes, reputationRes] = await Promise.all([
-          fetch('/api/escrow/stats/overview'),
-          fetch('/api/disputes/stats/overview'),
-          fetch('/api/reputation/stats/overview')
+          fetch(`${config.apiUrl}/api/escrow/stats/overview`),
+          fetch(`${config.apiUrl}/api/disputes/stats/overview`),
+          fetch(`${config.apiUrl}/api/reputation/stats/overview`)
         ]);
 
         const escrowData = await escrowRes.json();
