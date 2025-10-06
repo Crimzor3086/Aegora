@@ -21,8 +21,22 @@ const PORT = process.env.PORT || 3001;
 
 // Security middleware
 app.use(helmet());
+
+// CORS whitelist: support comma-separated FRONTEND_CORS or single FRONTEND_URL
+const rawCors = process.env.FRONTEND_CORS || process.env.FRONTEND_URL || 'http://localhost:3000';
+const allowedOrigins = rawCors.split(',').map(s => s.trim()).filter(Boolean);
+logger.info(`CORS allowed origins: ${allowedOrigins.join(', ')}`);
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  origin: function (origin, callback) {
+    // Allow requests with no origin (e.g., curl, server-to-server)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      return callback(null, true);
+    }
+    const msg = `The CORS policy for this site does not allow access from the specified Origin: ${origin}`;
+    return callback(new Error(msg), false);
+  },
   credentials: true
 }));
 
