@@ -21,7 +21,7 @@ export default function P2PPage() {
     try {
       setLoading(true);
       setErrorMsg('');
-      const res = await fetch(`${config.apiUrl}/api/p2p/orders?status=open`);
+      const res = await fetch('/api/p2p/orders?status=open');
       if (!res.ok) throw new Error('Failed to load orders');
       const data = await res.json();
       if (data.success) setOrders(data.data);
@@ -46,7 +46,7 @@ export default function P2PPage() {
       paymentMethods: form.get('paymentMethods') ? form.get('paymentMethods').split(',').map(s => s.trim()) : []
     };
     try {
-      const res = await fetch(`${config.apiUrl}/api/p2p/orders`, {
+      const res = await fetch('/api/p2p/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body)
@@ -65,7 +65,7 @@ export default function P2PPage() {
 
   const cancelOrder = async (orderId) => {
     try {
-      const res = await fetch(`${config.apiUrl}/api/p2p/orders/${orderId}/cancel`, { method: 'POST' });
+      const res = await fetch(`/api/p2p/orders/${orderId}/cancel`, { method: 'POST' });
       const data = await res.json();
       if (data.success) fetchOrders();
     } catch {}
