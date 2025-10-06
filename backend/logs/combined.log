@@ -495,3 +495,11 @@
 {"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mDatabase connected successfully\u001b[39m","timestamp":"2025-10-06 15:57:33:5733"}
 {"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mAegora Backend API server running on port 3001\u001b[39m","timestamp":"2025-10-06 15:57:33:5733"}
 {"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mEnvironment: development\u001b[39m","timestamp":"2025-10-06 15:57:33:5733"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m::1 - - [06/Oct/2025:20:00:16 +0000] \"GET /api/escrow HTTP/1.1\" 200 - \"-\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\"\u001b[39m","timestamp":"2025-10-06 16:00:16:016"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mSIGINT received, shutting down gracefully\u001b[39m","timestamp":"2025-10-06 16:00:50:050"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mCORS allowed origins: http://localhost:3000, https://aegora.vercel.app\u001b[39m","timestamp":"2025-10-06 16:01:41:141"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mConnected to MongoDB\u001b[39m","timestamp":"2025-10-06 16:01:41:141"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mDatabase connected successfully\u001b[39m","timestamp":"2025-10-06 16:01:41:141"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mAegora Backend API server running on port 3001\u001b[39m","timestamp":"2025-10-06 16:01:41:141"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mEnvironment: development\u001b[39m","timestamp":"2025-10-06 16:01:41:141"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m::1 - - [06/Oct/2025:20:01:49 +0000] \"GET /api/escrow HTTP/1.1\" 304 - \"-\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\"\u001b[39m","timestamp":"2025-10-06 16:01:49:149"}
