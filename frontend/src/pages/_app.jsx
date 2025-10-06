@@ -60,6 +60,12 @@ const wagmiConfig = createConfig({
   webSocketPublicClient,
 });
 
+const walletConnectProjectId = config.walletConnectProjectId;
+
+if (!walletConnectProjectId) {
+  throw new Error("NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID is not set in the environment. Please set it to your WalletConnect project ID.");
+}
+
 function MyApp({ Component, pageProps }) {
   return (
     <WagmiConfig config={wagmiConfig}>
