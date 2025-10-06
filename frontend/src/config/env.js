@@ -21,7 +21,7 @@ export const config = {
   alchemyId: process.env.NEXT_PUBLIC_ALCHEMY_ID || null,
   
   // API Configuration
-  apiUrl: process.env.NEXT_PUBLIC_API_URL || 'https://aegora.onrender.com',
+  apiUrl: process.env.NEXT_PUBLIC_BACKEND_URL || 'https://aegora.onrender.com',
   
   // App Configuration
   appName: 'Aegora',
