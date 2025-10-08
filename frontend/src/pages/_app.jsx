@@ -62,22 +62,21 @@ const wagmiConfig = createConfig({
   webSocketPublicClient,
 });
 
-const walletConnectProjectId = config.walletConnectProjectId;
-
-if (!walletConnectProjectId) {
-  throw new Error("NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID is not set in the environment. Please set it to your WalletConnect project ID.");
-}
+import dynamic from 'next/dynamic';
+import Web3Providers from '../components/Web3Providers';
 
 function MyApp({ Component, pageProps }) {
   return (
     <ErrorBoundary>
-      <WagmiConfig config={wagmiConfig}>
-        <RainbowKitProvider chains={chains}>
-          <ToastProvider>
+      <ToastProvider>
+        {typeof window !== 'undefined' ? (
+          <Web3Providers wagmiConfig={wagmiConfig} chains={chains}>
             <Component {...pageProps} />
-          </ToastProvider>
-        </RainbowKitProvider>
-      </WagmiConfig>
+          </Web3Providers>
+        ) : (
+          <Component {...pageProps} />
+        )}
+      </ToastProvider>
     </ErrorBoundary>
   );
 }
