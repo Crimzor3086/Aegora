@@ -3,6 +3,7 @@
 export const dynamic = 'force-dynamic';
 
 import { useEffect, useState } from 'react';
+import { withWeb3 } from '../utils/withWeb3';
 import Head from 'next/head';
 import { useAccount } from 'wagmi';
 import { motion } from 'framer-motion';
@@ -11,7 +12,7 @@ import Navbar from '../components/Navbar';
 import { useToast } from '../components/Toast';
 import { handleApiError, validateFormInput } from '../utils/errorHandler';
 
-export default function P2PPage() {
+function P2PPage() {
   const { address, isConnected } = useAccount();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -226,5 +227,7 @@ export default function P2PPage() {
     </>
   );
 }
+
+export default withWeb3(P2PPage);
 
 

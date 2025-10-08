@@ -3,6 +3,7 @@
 export const dynamic = 'force-dynamic';
 
 import { useState, useEffect } from 'react';
+import { withWeb3 } from '../utils/withWeb3';
 import Head from 'next/head';
 import { useAccount } from 'wagmi';
 import { motion } from 'framer-motion';
@@ -25,7 +26,7 @@ import ReputationBadge from '../components/ReputationBadge';
 import { useToast } from '../components/Toast';
 import { handleApiError } from '../utils/errorHandler';
 
-export default function ReputationPage() {
+function ReputationPage() {
   const { address, isConnected } = useAccount();
   const [reputations, setReputations] = useState([]);
   const [userReputation, setUserReputation] = useState(null);
@@ -424,3 +425,5 @@ export default function ReputationPage() {
     </>
   );
 }
+
+export default withWeb3(ReputationPage);

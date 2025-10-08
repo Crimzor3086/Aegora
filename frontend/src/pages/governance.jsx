@@ -3,6 +3,7 @@
 export const dynamic = 'force-dynamic';
 
 import { useState, useEffect } from 'react';
+import { withWeb3 } from '../utils/withWeb3';
 import Head from 'next/head';
 import { useAccount, useContractRead, useContractWrite } from 'wagmi';
 import { motion } from 'framer-motion';
@@ -20,7 +21,7 @@ import {
 } from 'lucide-react';
 import Navbar from '../components/Navbar';
 
-export default function GovernancePage() {
+function GovernancePage() {
   const { address, isConnected } = useAccount();
   const [proposals, setProposals] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -606,3 +607,5 @@ export default function GovernancePage() {
     </>
   );
 }
+
+export default withWeb3(GovernancePage);

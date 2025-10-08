@@ -3,6 +3,7 @@
 export const dynamic = 'force-dynamic';
 
 import { useState, useEffect } from 'react';
+import { withWeb3 } from '../utils/withWeb3';
 import Head from 'next/head';
 import { useAccount } from 'wagmi';
 import { motion } from 'framer-motion';
@@ -490,3 +491,5 @@ export default function EscrowPage() {
     </>
   );
 }
+
+export default withWeb3(EscrowPage);
