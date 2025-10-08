@@ -1,3 +1,7 @@
+'use client';
+
+export const dynamic = 'force-dynamic';
+
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { useAccount, useContractRead, useContractWrite } from 'wagmi';
