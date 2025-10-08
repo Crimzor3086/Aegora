@@ -18,16 +18,34 @@ export default function P2PPage() {
     fetchOrders();
   }, []);
 
+  const { showToast } = useToast();
+
   const fetchOrders = async () => {
     try {
       setLoading(true);
       setErrorMsg('');
       const res = await fetch('/api/p2p/orders?status=open');
-      if (!res.ok) throw new Error('Failed to load orders');
+      
+      if (!res.ok) {
+        const error = await handleApiError(res);
+        showToast({ type: 'error', message: error.message });
+        setErrorMsg(error.message);
+        return;
+      }
+      
       const data = await res.json();
-      if (data.success) setOrders(data.data);
-    } catch (e) {
-      setErrorMsg('Failed to load P2P orders.');
+      if (data.success) {
+        setOrders(data.data);
+        showToast({ 
+          type: 'success', 
+          message: `Loaded ${data.data.length} P2P orders` 
+        });
+      }
+    } catch (error) {
+      const handledError = await handleApiError(error);
+      console.error('Error fetching orders:', handledError);
+      showToast({ type: 'error', message: handledError.message });
+      setErrorMsg(handledError.message);
     } finally {
       setLoading(false);
     }
@@ -35,9 +53,16 @@ export default function P2PPage() {
 
   const createOrder = async (e) => {
     e.preventDefault();
-    if (!isConnected) return alert('Connect your wallet');
+    if (!isConnected) {
+      showToast({ 
+        type: 'error', 
+        message: 'Please connect your wallet first' 
+      });
+      return;
+    }
+
     const form = new FormData(e.target);
-    const body = {
+    const orderData = {
       maker: address,
       type: form.get('type'),
       price: parseFloat(form.get('price')),
@@ -46,6 +71,23 @@ export default function P2PPage() {
       maxAmount: parseFloat(form.get('maxAmount')) || 0,
       paymentMethods: form.get('paymentMethods') ? form.get('paymentMethods').split(',').map(s => s.trim()) : []
     };
+
+    // Validate order input
+    const validation = validateFormInput(orderData, {
+      type: { required: true },
+      price: { required: true, min: 0.000001 },
+      amount: { required: true, min: 0.000001 },
+      paymentMethods: { required: true }
+    });
+
+    if (!validation.isValid) {
+      showToast({
+        type: 'error',
+        message: Object.values(validation.errors)[0]
+      });
+      return;
+    }
+
     try {
       const res = await fetch('/api/p2p/orders', {
         method: 'POST',

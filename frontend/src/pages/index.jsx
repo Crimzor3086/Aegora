@@ -14,9 +14,10 @@ import {
   Zap
 } from 'lucide-react';
 import Navbar from '../components/Navbar';
-import config from '../config/env';
 import EscrowCard from '../components/EscrowCard';
 import ReputationBadge from '../components/ReputationBadge';
+import { useToast } from '../components/Toast';
+import { handleApiError } from '../utils/errorHandler';
 
 export default function Home() {
   const { address, isConnected } = useAccount();
@@ -27,8 +28,9 @@ export default function Home() {
     totalVolume: 0
   });
 
+  const { showToast } = useToast();
+
   useEffect(() => {
-    // Fetch stats from API
     const fetchStats = async () => {
       try {
         const [escrowRes, disputeRes, reputationRes] = await Promise.all([
@@ -37,17 +39,48 @@ export default function Home() {
           fetch('/api/reputation/stats/overview')
         ]);
 
-        const escrowData = await escrowRes.json();
-        const disputeData = await disputeRes.json();
-        const reputationData = await reputationRes.json();
+        // Check each response
+        for (const [name, res] of [
+          ['Escrow', escrowRes],
+          ['Disputes', disputeRes],
+          ['Reputation', reputationRes]
+        ]) {
+          if (!res.ok) {
+            const error = await handleApiError(res);
+            showToast({
+              type: 'error',
+              message: `Failed to load ${name} stats: ${error.message}`
+            });
+            return;
+          }
+        }
 
-        setStats({
-          totalEscrows: escrowData.data?.total || 0,
-          activeDisputes: disputeData.data?.active || 0,
-          totalUsers: reputationData.data?.totalUsers || 0,
-          totalVolume: escrowData.data?.byStatus?.reduce((sum, item) => sum + item.totalAmount, 0) || 0
-        });
+        const [escrowData, disputeData, reputationData] = await Promise.all([
+          escrowRes.json(),
+          disputeRes.json(),
+          reputationRes.json()
+        ]);
+
+        if (escrowData.success && disputeData.success && reputationData.success) {
+          setStats({
+            totalEscrows: escrowData.data?.total || 0,
+            activeDisputes: disputeData.data?.active || 0,
+            totalUsers: reputationData.data?.totalUsers || 0,
+            totalVolume: escrowData.data?.byStatus?.reduce((sum, item) => sum + item.totalAmount, 0) || 0
+          });
+
+          showToast({
+            type: 'success',
+            message: 'Platform statistics updated successfully'
+          });
+        }
       } catch (error) {
+        const handledError = await handleApiError(error);
+        console.error('Error fetching platform stats:', handledError);
+        showToast({ 
+          type: 'error', 
+          message: 'Failed to load platform statistics: ' + handledError.message 
+        });
         console.error('Error fetching stats:', error);
       }
     };

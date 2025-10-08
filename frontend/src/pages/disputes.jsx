@@ -18,7 +18,8 @@ import {
   XCircle
 } from 'lucide-react';
 import Navbar from '../components/Navbar';
-import config from '../config/env';
+import { useToast } from '../components/Toast';
+import { handleApiError, handleContractError, validateFormInput } from '../utils/errorHandler';
 
 export default function DisputesPage() {
   const { address, isConnected } = useAccount();
@@ -42,23 +43,34 @@ export default function DisputesPage() {
     }
   }, [address]);
 
+  const { showToast } = useToast();
+
   const fetchDisputes = async () => {
     try {
       setLoading(true);
       setErrorMsg('');
       const response = await fetch('/api/disputes');
-      if (!response.ok) {
-        const text = await response.text();
-        throw new Error(text || `Request failed with status ${response.status}`);
-      }
-      const data = await response.json();
       
+      if (!response.ok) {
+        const error = await handleApiError(response);
+        showToast({ type: 'error', message: error.message });
+        setErrorMsg(error.message);
+        return;
+      }
+      
+      const data = await response.json();
       if (data.success) {
         setDisputes(data.data);
+        showToast({
+          type: 'success',
+          message: `Loaded ${data.data.length} disputes`
+        });
       }
     } catch (error) {
-      console.error('Error fetching disputes:', error);
-      setErrorMsg('Failed to load disputes. Is the backend and MongoDB running?');
+      const handledError = await handleApiError(error);
+      console.error('Error fetching disputes:', handledError);
+      showToast({ type: 'error', message: handledError.message });
+      setErrorMsg(handledError.message);
     } finally {
       setLoading(false);
     }
@@ -94,30 +106,60 @@ export default function DisputesPage() {
   };
 
   const checkJurorStatus = async () => {
+    if (!address) return;
+    
     try {
       const response = await fetch(`/api/jurors/${address}`);
-      if (!response.ok) return setCurrentJuror(null);
-      const data = await response.json();
       
+      if (!response.ok) {
+        const error = await handleApiError(response);
+        console.error('Error checking juror status:', error);
+        setCurrentJuror(null);
+        return;
+      }
+      
+      const data = await response.json();
       if (data.success) {
         setCurrentJuror(data.data);
       } else {
         setCurrentJuror(null);
       }
     } catch (error) {
-      console.error('Error checking juror status:', error);
+      const handledError = await handleApiError(error);
+      console.error('Error checking juror status:', handledError);
+      showToast({ type: 'error', message: handledError.message });
       setCurrentJuror(null);
     }
   };
 
   const handleBecomeJuror = async () => {
     if (!isConnected) {
-      alert('Please connect your wallet first');
+      showToast({
+        type: 'error',
+        message: 'Please connect your wallet first'
+      });
       return;
     }
 
-    if (!jurorStake || parseFloat(jurorStake) < 1000) {
-      alert('Minimum stake required is 1000 AEG tokens');
+    const jurorData = {
+      address,
+      stake: parseFloat(jurorStake)
+    };
+
+    // Validate juror registration data
+    const validation = validateFormInput(jurorData, {
+      stake: { 
+        required: true, 
+        min: 1000,
+        max: 1000000 // Add reasonable maximum if needed
+      }
+    });
+
+    if (!validation.isValid) {
+      showToast({
+        type: 'error',
+        message: Object.values(validation.errors)[0] || 'Minimum stake required is 1000 AEG tokens'
+      });
       return;
     }
 
@@ -128,11 +170,14 @@ export default function DisputesPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          address: address,
-          stake: parseFloat(jurorStake)
-        })
+        body: JSON.stringify(jurorData)
       });
+
+      if (!response.ok) {
+        const error = await handleApiError(response);
+        showToast({ type: 'error', message: error.message });
+        return;
+      }
 
       const data = await response.json();
 

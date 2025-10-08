@@ -18,7 +18,8 @@ import {
 } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import ReputationBadge from '../components/ReputationBadge';
-import config from '../config/env';
+import { useToast } from '../components/Toast';
+import { handleApiError } from '../utils/errorHandler';
 
 export default function ReputationPage() {
   const { address, isConnected } = useAccount();
@@ -35,32 +36,63 @@ export default function ReputationPage() {
     }
   }, [address]);
 
+  const { showToast } = useToast();
+
   const fetchReputations = async () => {
     try {
       setLoading(true);
       const response = await fetch('/api/reputation/leaderboard/top?limit=50');
-      const data = await response.json();
       
+      if (!response.ok) {
+        const error = await handleApiError(response);
+        showToast({ type: 'error', message: error.message });
+        return;
+      }
+      
+      const data = await response.json();
       if (data.success) {
         setReputations(data.data);
+        showToast({
+          type: 'success',
+          message: `Loaded top ${data.data.length} users by reputation`
+        });
       }
     } catch (error) {
-      console.error('Error fetching reputations:', error);
+      const handledError = await handleApiError(error);
+      console.error('Error fetching reputations:', handledError);
+      showToast({ type: 'error', message: handledError.message });
     } finally {
       setLoading(false);
     }
   };
 
   const fetchUserReputation = async () => {
+    if (!address) return;
+
     try {
       const response = await fetch(`/api/reputation/${address}`);
-      const data = await response.json();
       
+      if (!response.ok) {
+        const error = await handleApiError(response);
+        showToast({ 
+          type: 'error', 
+          message: `Failed to load your reputation: ${error.message}` 
+        });
+        return;
+      }
+      
+      const data = await response.json();
       if (data.success) {
         setUserReputation(data.data);
+        showToast({
+          type: 'info',
+          message: `Your current reputation score: ${data.data.score}`
+        });
       }
     } catch (error) {
-      console.error('Error fetching user reputation:', error);
+      const handledError = await handleApiError(error);
+      console.error('Error fetching user reputation:', handledError);
+      showToast({ type: 'error', message: handledError.message });
     }
   };
 
