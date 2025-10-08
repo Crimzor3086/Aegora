@@ -6,6 +6,8 @@ import { RainbowKitProvider, getDefaultWallets } from '@rainbow-me/rainbowkit';
 import '@rainbow-me/rainbowkit/styles.css';
 import '../styles/globals.css';
 import config from '../config/env';
+import ErrorBoundary from '../components/ErrorBoundary';
+import { ToastProvider } from '../components/Toast';
 
 // U2U Network Nebulas Testnet configuration
 const u2uNebulasTestnet = {
@@ -68,11 +70,15 @@ if (!walletConnectProjectId) {
 
 function MyApp({ Component, pageProps }) {
   return (
-    <WagmiConfig config={wagmiConfig}>
-      <RainbowKitProvider chains={chains}>
-        <Component {...pageProps} />
-      </RainbowKitProvider>
-    </WagmiConfig>
+    <ErrorBoundary>
+      <WagmiConfig config={wagmiConfig}>
+        <RainbowKitProvider chains={chains}>
+          <ToastProvider>
+            <Component {...pageProps} />
+          </ToastProvider>
+        </RainbowKitProvider>
+      </WagmiConfig>
+    </ErrorBoundary>
   );
 }
 

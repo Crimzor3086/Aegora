@@ -4,7 +4,8 @@ import { useAccount } from 'wagmi';
 import { motion } from 'framer-motion';
 import { Plus, RefreshCw, DollarSign, X } from 'lucide-react';
 import Navbar from '../components/Navbar';
-import config from '../config/env';
+import { useToast } from '../components/Toast';
+import { handleApiError, validateFormInput } from '../utils/errorHandler';
 
 export default function P2PPage() {
   const { address, isConnected } = useAccount();

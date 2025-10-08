@@ -14,7 +14,8 @@ import {
 } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import EscrowCard from '../components/EscrowCard';
-import config from '../config/env';
+import { useToast } from '../components/Toast';
+import { handleApiError, handleContractError, validateFormInput } from '../utils/errorHandler';
 
 export default function EscrowPage() {
   const { address, isConnected } = useAccount();
@@ -29,23 +30,30 @@ export default function EscrowPage() {
     fetchEscrows();
   }, []);
 
+  const { showToast } = useToast();
+
   const fetchEscrows = async () => {
     try {
       setLoading(true);
       setErrorMsg('');
       const response = await fetch('/api/escrow');
-      if (!response.ok) {
-        const text = await response.text();
-        throw new Error(text || `Request failed with status ${response.status}`);
-      }
-      const data = await response.json();
       
+      if (!response.ok) {
+        const error = await handleApiError(response);
+        showToast({ type: 'error', message: error.message });
+        setErrorMsg(error.message);
+        return;
+      }
+      
+      const data = await response.json();
       if (data.success) {
         setEscrows(data.data);
       }
     } catch (error) {
-      console.error('Error fetching escrows:', error);
-      setErrorMsg('Failed to load escrows. Is the backend and MongoDB running?');
+      const handledError = await handleApiError(error);
+      console.error('Error fetching escrows:', handledError);
+      showToast({ type: 'error', message: handledError.message });
+      setErrorMsg(handledError.message);
     } finally {
       setLoading(false);
     }
@@ -95,29 +103,52 @@ export default function EscrowPage() {
 
   const handleDisputeEscrow = async (escrowId) => {
     try {
+      // Validate dispute evidence
+      const disputeData = {
+        userAddress: address,
+        evidenceHash: 'QmExampleHash',
+        evidenceDescription: 'Dispute evidence'
+      };
+
+      const validation = validateFormInput(disputeData, {
+        evidenceDescription: { required: true },
+        evidenceHash: { required: true }
+      });
+
+      if (!validation.isValid) {
+        showToast({
+          type: 'error',
+          message: Object.values(validation.errors)[0]
+        });
+        return;
+      }
+
       const response = await fetch(`/api/escrow/${escrowId}/dispute`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          userAddress: address,
-          evidenceHash: 'QmExampleHash', // This would be uploaded to IPFS
-          evidenceDescription: 'Dispute evidence'
-        })
+        body: JSON.stringify(disputeData)
       });
       
-      const data = await response.json();
+      if (!response.ok) {
+        const error = await handleApiError(response);
+        showToast({ type: 'error', message: error.message });
+        return;
+      }
       
+      const data = await response.json();
       if (data.success) {
-        // Refresh escrows
+        showToast({
+          type: 'success',
+          message: 'Dispute created successfully'
+        });
         fetchEscrows();
-      } else {
-        alert('Error creating dispute: ' + data.message);
       }
     } catch (error) {
-      console.error('Error creating dispute:', error);
-      alert('Error creating dispute');
+      const handledError = await handleApiError(error);
+      console.error('Error creating dispute:', handledError);
+      showToast({ type: 'error', message: handledError.message });
     }
   };
 
@@ -125,14 +156,34 @@ export default function EscrowPage() {
     e.preventDefault();
     
     if (!isConnected) {
-      alert('Please connect your wallet first');
+      showToast({
+        type: 'error',
+        message: 'Please connect your wallet first'
+      });
       return;
     }
 
     const formData = new FormData(e.target);
-    const sellerAddress = formData.get('sellerAddress');
-    const amount = formData.get('amount');
-    const description = formData.get('description');
+    const escrowData = {
+      seller: formData.get('sellerAddress'),
+      amount: parseFloat(formData.get('amount')),
+      description: formData.get('description')
+    };
+
+    // Validate form input
+    const validation = validateFormInput(escrowData, {
+      seller: { required: true, pattern: /^0x[a-fA-F0-9]{40}$/ },
+      amount: { required: true, min: 0.01 },
+      description: { required: true }
+    });
+
+    if (!validation.isValid) {
+      showToast({
+        type: 'error',
+        message: Object.values(validation.errors)[0]
+      });
+      return;
+    }
 
     try {
       const response = await fetch('/api/escrow', {
