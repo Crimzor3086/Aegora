@@ -1,9 +1,4 @@
-'use client';
-
-export const dynamic = 'force-dynamic';
-
 import { useState, useEffect } from 'react';
-import { withWeb3 } from '../utils/withWeb3';
 import Head from 'next/head';
 import { useAccount } from 'wagmi';
 import { motion } from 'framer-motion';
@@ -23,8 +18,7 @@ import {
   XCircle
 } from 'lucide-react';
 import Navbar from '../components/Navbar';
-import { useToast } from '../components/Toast';
-import { handleApiError, handleContractError, validateFormInput } from '../utils/errorHandler';
+import config from '../config/env';
 
 export default function DisputesPage() {
   const { address, isConnected } = useAccount();
@@ -48,34 +42,23 @@ export default function DisputesPage() {
     }
   }, [address]);
 
-  const { showToast } = useToast();
-
   const fetchDisputes = async () => {
     try {
       setLoading(true);
       setErrorMsg('');
       const response = await fetch('/api/disputes');
-      
       if (!response.ok) {
-        const error = await handleApiError(response);
-        showToast({ type: 'error', message: error.message });
-        setErrorMsg(error.message);
-        return;
+        const text = await response.text();
+        throw new Error(text || `Request failed with status ${response.status}`);
       }
-      
       const data = await response.json();
+      
       if (data.success) {
         setDisputes(data.data);
-        showToast({
-          type: 'success',
-          message: `Loaded ${data.data.length} disputes`
-        });
       }
     } catch (error) {
-      const handledError = await handleApiError(error);
-      console.error('Error fetching disputes:', handledError);
-      showToast({ type: 'error', message: handledError.message });
-      setErrorMsg(handledError.message);
+      console.error('Error fetching disputes:', error);
+      setErrorMsg('Failed to load disputes. Is the backend and MongoDB running?');
     } finally {
       setLoading(false);
     }
@@ -111,60 +94,30 @@ export default function DisputesPage() {
   };
 
   const checkJurorStatus = async () => {
-    if (!address) return;
-    
     try {
       const response = await fetch(`/api/jurors/${address}`);
-      
-      if (!response.ok) {
-        const error = await handleApiError(response);
-        console.error('Error checking juror status:', error);
-        setCurrentJuror(null);
-        return;
-      }
-      
+      if (!response.ok) return setCurrentJuror(null);
       const data = await response.json();
+      
       if (data.success) {
         setCurrentJuror(data.data);
       } else {
         setCurrentJuror(null);
       }
     } catch (error) {
-      const handledError = await handleApiError(error);
-      console.error('Error checking juror status:', handledError);
-      showToast({ type: 'error', message: handledError.message });
+      console.error('Error checking juror status:', error);
       setCurrentJuror(null);
     }
   };
 
   const handleBecomeJuror = async () => {
     if (!isConnected) {
-      showToast({
-        type: 'error',
-        message: 'Please connect your wallet first'
-      });
+      alert('Please connect your wallet first');
       return;
     }
 
-    const jurorData = {
-      address,
-      stake: parseFloat(jurorStake)
-    };
-
-    // Validate juror registration data
-    const validation = validateFormInput(jurorData, {
-      stake: { 
-        required: true, 
-        min: 1000,
-        max: 1000000 // Add reasonable maximum if needed
-      }
-    });
-
-    if (!validation.isValid) {
-      showToast({
-        type: 'error',
-        message: Object.values(validation.errors)[0] || 'Minimum stake required is 1000 AEG tokens'
-      });
+    if (!jurorStake || parseFloat(jurorStake) < 1000) {
+      alert('Minimum stake required is 1000 AEG tokens');
       return;
     }
 
@@ -175,14 +128,11 @@ export default function DisputesPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(jurorData)
+        body: JSON.stringify({
+          address: address,
+          stake: parseFloat(jurorStake)
+        })
       });
-
-      if (!response.ok) {
-        const error = await handleApiError(response);
-        showToast({ type: 'error', message: error.message });
-        return;
-      }
 
       const data = await response.json();
 
@@ -700,5 +650,3 @@ export default function DisputesPage() {
     </>
   );
 }
-
-export default withWeb3(DisputesPage);

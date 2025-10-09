@@ -1,9 +1,4 @@
-'use client';
-
-export const dynamic = 'force-dynamic';
-
 import { useState, useEffect } from 'react';
-import { withWeb3 } from '../utils/withWeb3';
 import Head from 'next/head';
 import { useAccount } from 'wagmi';
 import { motion } from 'framer-motion';
@@ -23,10 +18,9 @@ import {
 } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import ReputationBadge from '../components/ReputationBadge';
-import { useToast } from '../components/Toast';
-import { handleApiError } from '../utils/errorHandler';
+import config from '../config/env';
 
-function ReputationPage() {
+export default function ReputationPage() {
   const { address, isConnected } = useAccount();
   const [reputations, setReputations] = useState([]);
   const [userReputation, setUserReputation] = useState(null);
@@ -41,63 +35,32 @@ function ReputationPage() {
     }
   }, [address]);
 
-  const { showToast } = useToast();
-
   const fetchReputations = async () => {
     try {
       setLoading(true);
       const response = await fetch('/api/reputation/leaderboard/top?limit=50');
-      
-      if (!response.ok) {
-        const error = await handleApiError(response);
-        showToast({ type: 'error', message: error.message });
-        return;
-      }
-      
       const data = await response.json();
+      
       if (data.success) {
         setReputations(data.data);
-        showToast({
-          type: 'success',
-          message: `Loaded top ${data.data.length} users by reputation`
-        });
       }
     } catch (error) {
-      const handledError = await handleApiError(error);
-      console.error('Error fetching reputations:', handledError);
-      showToast({ type: 'error', message: handledError.message });
+      console.error('Error fetching reputations:', error);
     } finally {
       setLoading(false);
     }
   };
 
   const fetchUserReputation = async () => {
-    if (!address) return;
-
     try {
       const response = await fetch(`/api/reputation/${address}`);
-      
-      if (!response.ok) {
-        const error = await handleApiError(response);
-        showToast({ 
-          type: 'error', 
-          message: `Failed to load your reputation: ${error.message}` 
-        });
-        return;
-      }
-      
       const data = await response.json();
+      
       if (data.success) {
         setUserReputation(data.data);
-        showToast({
-          type: 'info',
-          message: `Your current reputation score: ${data.data.score}`
-        });
       }
     } catch (error) {
-      const handledError = await handleApiError(error);
-      console.error('Error fetching user reputation:', handledError);
-      showToast({ type: 'error', message: handledError.message });
+      console.error('Error fetching user reputation:', error);
     }
   };
 
@@ -425,5 +388,3 @@ function ReputationPage() {
     </>
   );
 }
-
-export default withWeb3(ReputationPage);

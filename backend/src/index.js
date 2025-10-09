@@ -9,17 +9,6 @@ require('dotenv').config();
 const db = require('./db');
 const logger = require('./utils/logger');
 
-// Initialize database connection
-(async () => {
-  try {
-    await db.connect();
-    logger.info('Database connected successfully');
-  } catch (error) {
-    logger.error('Failed to connect to database:', error);
-    process.exit(1);
-  }
-})();
-
 // Import routes
 const disputeRoutes = require('./routes/disputes');
 const escrowRoutes = require('./routes/escrow');

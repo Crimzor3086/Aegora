@@ -6,8 +6,6 @@ import { RainbowKitProvider, getDefaultWallets } from '@rainbow-me/rainbowkit';
 import '@rainbow-me/rainbowkit/styles.css';
 import '../styles/globals.css';
 import config from '../config/env';
-import ErrorBoundary from '../components/ErrorBoundary';
-import { ToastProvider } from '../components/Toast';
 
 // U2U Network Nebulas Testnet configuration
 const u2uNebulasTestnet = {
@@ -62,22 +60,19 @@ const wagmiConfig = createConfig({
   webSocketPublicClient,
 });
 
-import dynamic from 'next/dynamic';
-import Web3Providers from '../components/Web3Providers';
+const walletConnectProjectId = config.walletConnectProjectId;
+
+if (!walletConnectProjectId) {
+  throw new Error("NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID is not set in the environment. Please set it to your WalletConnect project ID.");
+}
 
 function MyApp({ Component, pageProps }) {
   return (
-    <ErrorBoundary>
-      <ToastProvider>
-        {typeof window !== 'undefined' ? (
-          <Web3Providers wagmiConfig={wagmiConfig} chains={chains}>
-            <Component {...pageProps} />
-          </Web3Providers>
-        ) : (
-          <Component {...pageProps} />
-        )}
-      </ToastProvider>
-    </ErrorBoundary>
+    <WagmiConfig config={wagmiConfig}>
+      <RainbowKitProvider chains={chains}>
+        <Component {...pageProps} />
+      </RainbowKitProvider>
+    </WagmiConfig>
   );
 }
 

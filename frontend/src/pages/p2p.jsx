@@ -1,18 +1,12 @@
-'use client';
-
-export const dynamic = 'force-dynamic';
-
 import { useEffect, useState } from 'react';
-import { withWeb3 } from '../utils/withWeb3';
 import Head from 'next/head';
 import { useAccount } from 'wagmi';
 import { motion } from 'framer-motion';
 import { Plus, RefreshCw, DollarSign, X } from 'lucide-react';
 import Navbar from '../components/Navbar';
-import { useToast } from '../components/Toast';
-import { handleApiError, validateFormInput } from '../utils/errorHandler';
+import config from '../config/env';
 
-function P2PPage() {
+export default function P2PPage() {
   const { address, isConnected } = useAccount();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -23,34 +17,16 @@ function P2PPage() {
     fetchOrders();
   }, []);
 
-  const { showToast } = useToast();
-
   const fetchOrders = async () => {
     try {
       setLoading(true);
       setErrorMsg('');
       const res = await fetch('/api/p2p/orders?status=open');
-      
-      if (!res.ok) {
-        const error = await handleApiError(res);
-        showToast({ type: 'error', message: error.message });
-        setErrorMsg(error.message);
-        return;
-      }
-      
+      if (!res.ok) throw new Error('Failed to load orders');
       const data = await res.json();
-      if (data.success) {
-        setOrders(data.data);
-        showToast({ 
-          type: 'success', 
-          message: `Loaded ${data.data.length} P2P orders` 
-        });
-      }
-    } catch (error) {
-      const handledError = await handleApiError(error);
-      console.error('Error fetching orders:', handledError);
-      showToast({ type: 'error', message: handledError.message });
-      setErrorMsg(handledError.message);
+      if (data.success) setOrders(data.data);
+    } catch (e) {
+      setErrorMsg('Failed to load P2P orders.');
     } finally {
       setLoading(false);
     }
@@ -58,16 +34,9 @@ function P2PPage() {
 
   const createOrder = async (e) => {
     e.preventDefault();
-    if (!isConnected) {
-      showToast({ 
-        type: 'error', 
-        message: 'Please connect your wallet first' 
-      });
-      return;
-    }
-
+    if (!isConnected) return alert('Connect your wallet');
     const form = new FormData(e.target);
-    const orderData = {
+    const body = {
       maker: address,
       type: form.get('type'),
       price: parseFloat(form.get('price')),
@@ -76,23 +45,6 @@ function P2PPage() {
       maxAmount: parseFloat(form.get('maxAmount')) || 0,
       paymentMethods: form.get('paymentMethods') ? form.get('paymentMethods').split(',').map(s => s.trim()) : []
     };
-
-    // Validate order input
-    const validation = validateFormInput(orderData, {
-      type: { required: true },
-      price: { required: true, min: 0.000001 },
-      amount: { required: true, min: 0.000001 },
-      paymentMethods: { required: true }
-    });
-
-    if (!validation.isValid) {
-      showToast({
-        type: 'error',
-        message: Object.values(validation.errors)[0]
-      });
-      return;
-    }
-
     try {
       const res = await fetch('/api/p2p/orders', {
         method: 'POST',
@@ -227,7 +179,5 @@ function P2PPage() {
     </>
   );
 }
-
-export default withWeb3(P2PPage);
 
 
