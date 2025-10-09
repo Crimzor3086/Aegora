@@ -1,0 +1,53 @@
+{
+  "network": "u2uMainnet",
+  "chainId": 39,
+  "deployer": "0x7c538b83D0295f94C4bBAf8302095d9ED4b2Ad5f",
+  "timestamp": "2025-10-09T14:03:22.621Z",
+  "contracts": {
+    "TokenAEG": {
+      "address": "0xc5645f895a48c8A572368AaFeaAb2D42d1203819",
+      "constructorArgs": []
+    },
+    "EscrowContract": {
+      "address": "0x647F8C626a90b5b8D4A69723bB672C759DD8A027",
+      "constructorArgs": []
+    },
+    "DisputeContract": {
+      "address": "0x80bBdD4D4606DF5Ba6561e4B9C4a59B49061f713",
+      "constructorArgs": [
+        "0xc5645f895a48c8A572368AaFeaAb2D42d1203819"
+      ]
+    },
+    "ReputationContract": {
+      "address": "0x290C258b604a3Cda5014B004ffe9c92Ab22D0F1c",
+      "constructorArgs": []
+    },
+    "TimelockController": {
+      "address": "0x3756be4955530Bba0844C4D2EcF35DB5ed7d90df",
+      "constructorArgs": [
+        172800,
+        [
+          "0x7c538b83D0295f94C4bBAf8302095d9ED4b2Ad5f"
+        ],
+        [
+          "0x7c538b83D0295f94C4bBAf8302095d9ED4b2Ad5f"
+        ],
+        "0x7c538b83D0295f94C4bBAf8302095d9ED4b2Ad5f"
+      ]
+    },
+    "GovernanceContract": {
+      "address": "0xAd72e9d18e6D2d70c081EDe1747fb8813C639446",
+      "constructorArgs": [
+        "0xc5645f895a48c8A572368AaFeaAb2D42d1203819",
+        "0x3756be4955530Bba0844C4D2EcF35DB5ed7d90df",
+        1,
+        17280,
+        {
+          "type": "BigNumber",
+          "hex": "0xd3c21bcecceda1000000"
+        },
+        4
+      ]
+    }
+  }
+}

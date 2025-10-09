@@ -235,3 +235,12 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 **Built with ❤️ by the Aegora Team**
 
 *Trust Without Centralization*
+
+npm install
+npx hardhat compile
+
+npx hardhat run scripts
+
+npx hardhat run scripts/deploy.js --network u2u
+
+npx hardhat verify --network u2u <deployedAddress> <constructorArgs...

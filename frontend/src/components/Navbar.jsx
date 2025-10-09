@@ -5,6 +5,7 @@ import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useAccount, usePublicClient } from 'wagmi';
 import { Menu, X, Shield, Scale, Users, Settings } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import ThemeToggle from './ThemeToggle';
 import config from '../config/env';
 import { fetchErc20Balance } from '../utils/ethers';
 
@@ -80,6 +81,7 @@ const Navbar = () => {
                 AEG: <span className="font-semibold">{aegBalance.formatted}</span>
               </div>
             )}
+            <ThemeToggle />
             <ConnectButton />
           </div>
 
@@ -124,7 +126,8 @@ const Navbar = () => {
                   <span>{item.name}</span>
                 </Link>
               ))}
-              <div className="px-3 py-2">
+              <div className="px-3 py-2 flex items-center justify-between">
+                <ThemeToggle />
                 <ConnectButton />
               </div>
             </div>

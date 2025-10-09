@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path");
 
 async function main() {
-  console.log("Starting Aegora deployment on U2U Network Nebulas testnet...");
+  console.log("Starting Aegora deployment on U2U Network mainnet...");
 
   // Get the deployer account
   const [deployer] = await ethers.getSigners();
@@ -136,7 +136,7 @@ async function main() {
   };
 
   // Save to file
-  const deploymentPath = path.join(__dirname, "../deployments/u2u-nebulas-testnet.json");
+  const deploymentPath = path.join(__dirname, "../deployments/u2u-mainnet.json");
   const deploymentDir = path.dirname(deploymentPath);
   
   if (!fs.existsSync(deploymentDir)) {
@@ -181,7 +181,7 @@ NEXT_PUBLIC_EXPLORER_URL=https://u2uscan.xyz
   console.log("GovernanceContract:", governanceContractAddress);
   
   console.log("\nNext steps:");
-  console.log("1. Verify contracts on U2U Network Nebulas testnet explorer");
+  console.log("1. Verify contracts on U2U Network mainnet explorer");
   console.log("2. Update frontend environment variables");
   console.log("3. Deploy backend API");
   console.log("4. Test the complete system");
