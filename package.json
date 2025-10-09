@@ -46,7 +46,7 @@
     "chai": "^4.5.0",
     "concurrently": "^8.2.2",
     "ethers": "5.8.0",
-    "hardhat": "^2.19.0",
+    "hardhat": "^2.26.3",
     "hardhat-gas-reporter": "^1.0.10",
     "solidity-coverage": "^0.8.16",
     "ts-node": "^10.9.2",

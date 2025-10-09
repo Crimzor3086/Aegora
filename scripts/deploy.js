@@ -91,8 +91,8 @@ async function main() {
 
   // Save deployment info
   const deploymentInfo = {
-    network: "u2uNebulasTestnet",
-    chainId: 2484,
+    network: "u2uMainnet",
+    chainId: 39,
     deployer: deployer.address,
     timestamp: new Date().toISOString(),
     contracts: {
@@ -148,7 +148,7 @@ async function main() {
 
   // Create .env file for frontend
   const envContent = `
-# Aegora Contract Addresses (U2U Network Nebulas Testnet)
+# Aegora Contract Addresses (U2Umainnet)
 NEXT_PUBLIC_TOKEN_AEG_ADDRESS=${tokenAEGAddress}
 NEXT_PUBLIC_ESCROW_CONTRACT_ADDRESS=${escrowContractAddress}
 NEXT_PUBLIC_DISPUTE_CONTRACT_ADDRESS=${disputeContractAddress}
@@ -157,9 +157,9 @@ NEXT_PUBLIC_GOVERNANCE_CONTRACT_ADDRESS=${governanceContractAddress}
 NEXT_PUBLIC_TIMELOCK_CONTROLLER_ADDRESS=${timelockControllerAddress}
 
 # Network Configuration
-NEXT_PUBLIC_CHAIN_ID=2484
-NEXT_PUBLIC_RPC_URL=https://rpc-nebulas-testnet.u2u.xyz
-NEXT_PUBLIC_EXPLORER_URL=https://nebulas-testnet-explorer.u2u.xyz
+NEXT_PUBLIC_CHAIN_ID=39
+NEXT_PUBLIC_RPC_URL=https://rpc-mainnet.u2u.xyz
+NEXT_PUBLIC_EXPLORER_URL=https://u2uscan.xyz
 `;
 
   const rootEnvPath = path.join(__dirname, "../.env.local");

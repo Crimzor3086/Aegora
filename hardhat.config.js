@@ -25,7 +25,7 @@ module.exports = {
       chainId: 1337,
     },
     u2u: {
-      url: "https://rpc.u2u.xyz",
+      url: "rpc-mainnet.u2u.xyz",
       chainId: 39,
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
       gasPrice: "auto",
