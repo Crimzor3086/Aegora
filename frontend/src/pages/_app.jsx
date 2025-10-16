@@ -1,8 +1,7 @@
-import { WagmiConfig, createConfig, configureChains } from 'wagmi';
-import { mainnet, polygon, arbitrum, optimism } from 'wagmi/chains';
-import { alchemyProvider } from 'wagmi/providers/alchemy';
-import { publicProvider } from 'wagmi/providers/public';
-import { RainbowKitProvider, getDefaultWallets } from '@rainbow-me/rainbowkit';
+import { WagmiConfig } from 'wagmi';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { http } from 'viem';
+import { RainbowKitProvider, getDefaultConfig } from '@rainbow-me/rainbowkit';
 import '@rainbow-me/rainbowkit/styles.css';
 import '../styles/globals.css';
 import config from '../config/env';
@@ -33,46 +32,33 @@ const u2uNebulasTestnet = {
   },
 };
 
-const providers = [];
-if (config.alchemyId) {
-  providers.push(alchemyProvider({ apiKey: config.alchemyId }));
-}
-providers.push(publicProvider());
-
-const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [u2uNebulasTestnet],
-  providers
-);
-
-const walletOptions = {
-  appName: config.appName,
-  chains,
-};
-if (config.walletConnectProjectId) {
-  walletOptions.projectId = config.walletConnectProjectId;
-}
-const { connectors } = getDefaultWallets(walletOptions);
-
-const wagmiConfig = createConfig({
-  autoConnect: true,
-  connectors,
-  publicClient,
-  webSocketPublicClient,
-});
-
-const walletConnectProjectId = config.walletConnectProjectId;
+let walletConnectProjectId = config.walletConnectProjectId;
 
 if (!walletConnectProjectId) {
-  throw new Error("NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID is not set in the environment. Please set it to your WalletConnect project ID.");
+  console.warn('NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID is not set. Using a development fallback; wallet connections may be limited.');
+  walletConnectProjectId = '00000000000000000000000000000000';
 }
+
+const wagmiConfig = getDefaultConfig({
+  appName: config.appName,
+  projectId: walletConnectProjectId,
+  chains: [u2uNebulasTestnet],
+  transports: {
+    [u2uNebulasTestnet.id]: http(config.rpcUrl),
+  },
+});
+
+const queryClient = new QueryClient();
 
 function MyApp({ Component, pageProps }) {
   return (
-    <WagmiConfig config={wagmiConfig}>
-      <RainbowKitProvider chains={chains}>
-        <Component {...pageProps} />
-      </RainbowKitProvider>
-    </WagmiConfig>
+    <QueryClientProvider client={queryClient}>
+      <WagmiConfig config={wagmiConfig}>
+        <RainbowKitProvider chains={[u2uNebulasTestnet]}>
+          <Component {...pageProps} />
+        </RainbowKitProvider>
+      </WagmiConfig>
+    </QueryClientProvider>
   );
 }
 

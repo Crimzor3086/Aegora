@@ -174,11 +174,11 @@ process.on('SIGINT', () => {
 async function startServer() {
   try {
     // Connect to database (optional for development)
-    try {
-      await db.connect();
+    const connected = await db.connect();
+    if (connected === false) {
+      logger.warn('Database connection failed, running in mock mode: connection not established');
+    } else {
       logger.info('Database connected successfully');
-    } catch (dbError) {
-      logger.warn('Database connection failed, running in mock mode:', dbError.message);
     }
     
     // Start server

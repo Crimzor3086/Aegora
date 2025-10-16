@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useAccount, usePublicClient } from 'wagmi';
@@ -43,16 +44,21 @@ const Navbar = () => {
   const isActive = (href) => router.pathname === href;
 
   return (
-    <nav className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+    <nav className="bg-white dark:bg-gray-900 shadow-sm border-b border-gray-200 dark:border-gray-800 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                <Shield className="w-5 h-5 text-white" />
-              </div>
-              <span className="text-xl font-bold text-gray-900">Aegora</span>
+              <Image
+                src="/images/logo.png"
+                alt="Aegora Logo"
+                width={32}
+                height={32}
+                className="rounded"
+                priority
+              />
+              <span className="text-xl font-bold text-gray-900 dark:text-gray-100">Aegora</span>
             </Link>
           </div>
 
@@ -64,8 +70,8 @@ const Navbar = () => {
                 href={item.href}
                 className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                   isActive(item.href)
-                    ? 'text-blue-600 bg-blue-50'
-                    : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
+                    ? 'text-blue-600 bg-blue-50 dark:text-blue-400 dark:bg-blue-950/30'
+                    : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:text-blue-400 dark:hover:bg-gray-800'
                 }`}
               >
                 <item.icon className="w-4 h-4" />
@@ -89,7 +95,7 @@ const Navbar = () => {
           <div className="md:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+              className="p-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:text-blue-400 dark:hover:bg-gray-800"
             >
               {isOpen ? (
                 <X className="w-6 h-6" />
@@ -108,7 +114,7 @@ const Navbar = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-white border-t border-gray-200"
+            className="md:hidden bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800"
           >
             <div className="px-4 py-2 space-y-1">
               {navigation.map((item) => (
@@ -117,8 +123,8 @@ const Navbar = () => {
                   href={item.href}
                   className={`flex items-center space-x-3 px-3 py-2 rounded-md text-base font-medium transition-colors ${
                     isActive(item.href)
-                      ? 'text-blue-600 bg-blue-50'
-                      : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
+                      ? 'text-blue-600 bg-blue-50 dark:text-blue-400 dark:bg-blue-950/30'
+                      : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:text-blue-400 dark:hover:bg-gray-800'
                   }`}
                   onClick={() => setIsOpen(false)}
                 >

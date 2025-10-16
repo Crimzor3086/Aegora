@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const router = express.Router();
 const Escrow = require('../db/models/Escrow');
 const User = require('../db/models/User');
@@ -8,6 +9,19 @@ const logger = require('../utils/logger');
 // Get all escrows
 router.get('/', async (req, res) => {
   try {
+    // If MongoDB is not connected, return an empty list so the UI can load in dev/mock mode
+    if (mongoose.connection.readyState !== 1) {
+      return res.json({
+        success: true,
+        data: [],
+        pagination: {
+          limit: 0,
+          offset: 0,
+          total: 0
+        }
+      });
+    }
+
     const { status, user, limit = 20, offset = 0 } = req.query;
     
     let query = {};

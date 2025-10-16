@@ -1,3 +1,5 @@
+import path from 'path';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -11,10 +13,11 @@ const nextConfig = {
     domains: ['ipfs.io', 'gateway.pinata.cloud', 'cloudflare-ipfs.com'],
   },
   async rewrites() {
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:4000';
     return [
       {
         source: '/api/:path*',
-        destination: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/:path*`,
+        destination: `${backendUrl.replace(/\/$/, '')}/api/:path*`,
       },
     ];
   },
@@ -24,6 +27,10 @@ const nextConfig = {
       fs: false,
       net: false,
       tls: false,
+    };
+    config.resolve.alias = {
+      ...(config.resolve.alias || {}),
+      '@react-native-async-storage/async-storage': path.resolve(process.cwd(), 'src/shims/asyncStorageShim.js'),
     };
     return config;
   },

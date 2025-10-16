@@ -13,7 +13,8 @@ const connect = async () => {
     logger.info('Connected to MongoDB');
   } catch (error) {
     logger.error('MongoDB connection error:', error);
-    throw error;
+    // Do not throw in dev/mock mode; allow server to continue without DB
+    return false;
   }
 };
 

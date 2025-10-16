@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Sun, Moon } from 'lucide-react';
 
 const STORAGE_KEY = 'aegora-theme';
 
@@ -32,9 +33,20 @@ export default function ThemeToggle() {
       type="button"
       onClick={toggle}
       aria-label="Toggle dark mode"
-      className="px-3 py-2 rounded-md text-sm font-medium transition-colors border border-gray-300 text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800"
+      aria-pressed={theme === 'dark'}
+      className="px-3 py-2 rounded-md text-sm font-medium transition-colors border border-gray-300 text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800 flex items-center gap-2"
     >
-      {theme === 'dark' ? 'Light' : 'Dark'}
+      {theme === 'dark' ? (
+        <>
+          <Sun className="w-4 h-4" />
+          <span className="hidden sm:inline">Light</span>
+        </>
+      ) : (
+        <>
+          <Moon className="w-4 h-4" />
+          <span className="hidden sm:inline">Dark</span>
+        </>
+      )}
     </button>
   );
 }
