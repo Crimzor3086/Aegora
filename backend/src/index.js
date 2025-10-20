@@ -23,7 +23,7 @@ const PORT = process.env.PORT || 3001;
 app.use(helmet());
 
 // CORS whitelist: support comma-separated FRONTEND_CORS or single FRONTEND_URL
-const rawCors = process.env.FRONTEND_CORS || process.env.FRONTEND_URL || 'http://localhost:3000';
+const rawCors = process.env.FRONTEND_CORS || process.env.FRONTEND_URL || 'http://localhost:3000,http://localhost:3002';
 const allowedOrigins = rawCors.split(',').map(s => s.trim()).filter(Boolean);
 logger.info(`CORS allowed origins: ${allowedOrigins.join(', ')}`);
 

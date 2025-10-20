@@ -613,3 +613,16 @@
 {"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m::1 - - [16/Oct/2025:14:07:22 +0000] \"GET /api/escrow/stats/overview HTTP/1.1\" 304 - \"http://localhost:3001/\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\"\u001b[39m","timestamp":"2025-10-16 08:07:22:722"}
 {"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m::1 - - [16/Oct/2025:14:07:22 +0000] \"GET /api/reputation/stats/overview HTTP/1.1\" 304 - \"http://localhost:3001/\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\"\u001b[39m","timestamp":"2025-10-16 08:07:22:722"}
 {"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m::1 - - [16/Oct/2025:14:07:22 +0000] \"GET /api/disputes/stats/overview HTTP/1.1\" 304 - \"http://localhost:3001/\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36\"\u001b[39m","timestamp":"2025-10-16 08:07:22:722"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mCORS allowed origins: http://localhost:3000\u001b[39m","timestamp":"2025-10-20 03:31:43:3143"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mConnected to MongoDB\u001b[39m","timestamp":"2025-10-20 03:31:43:3143"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mDatabase connected successfully\u001b[39m","timestamp":"2025-10-20 03:31:43:3143"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mAegora Backend API server running on port 3001\u001b[39m","timestamp":"2025-10-20 03:31:43:3143"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mEnvironment: development\u001b[39m","timestamp":"2025-10-20 03:31:43:3143"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mCORS allowed origins: http://localhost:3000\u001b[39m","timestamp":"2025-10-20 03:38:37:3837"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mConnected to MongoDB\u001b[39m","timestamp":"2025-10-20 03:38:37:3837"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mCORS allowed origins: http://localhost:3000, http://localhost:3002\u001b[39m","timestamp":"2025-10-20 03:45:09:459"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mConnected to MongoDB\u001b[39m","timestamp":"2025-10-20 03:45:09:459"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mDatabase connected successfully\u001b[39m","timestamp":"2025-10-20 03:45:09:459"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mAegora Backend API server running on port 3001\u001b[39m","timestamp":"2025-10-20 03:45:09:459"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32mEnvironment: development\u001b[39m","timestamp":"2025-10-20 03:45:09:459"}
+{"level":"\u001b[32minfo\u001b[39m","message":"\u001b[32m::1 - - [20/Oct/2025:09:45:15 +0000] \"GET /api/escrow/stats/overview HTTP/1.1\" 200 87 \"-\" \"curl/8.15.0\"\u001b[39m","timestamp":"2025-10-20 03:45:15:4515"}

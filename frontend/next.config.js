@@ -13,7 +13,7 @@ const nextConfig = {
     domains: ['ipfs.io', 'gateway.pinata.cloud', 'cloudflare-ipfs.com'],
   },
   async rewrites() {
-    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:4000';
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001';
     return [
       {
         source: '/api/:path*',

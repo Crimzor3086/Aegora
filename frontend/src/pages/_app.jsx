@@ -34,9 +34,9 @@ const u2uNebulasTestnet = {
 
 let walletConnectProjectId = config.walletConnectProjectId;
 
-if (!walletConnectProjectId) {
+if (!walletConnectProjectId || walletConnectProjectId === 'your_walletconnect_project_id_here') {
   console.warn('NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID is not set. Using a development fallback; wallet connections may be limited.');
-  walletConnectProjectId = '00000000000000000000000000000000';
+  walletConnectProjectId = '1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p';
 }
 
 const wagmiConfig = getDefaultConfig({
