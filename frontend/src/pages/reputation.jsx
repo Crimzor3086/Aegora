@@ -19,12 +19,14 @@ import {
 import Navbar from '../components/Navbar';
 import ReputationBadge from '../components/ReputationBadge';
 import config from '../config/env';
+import { fetchJson, ApiError } from '../utils/http';
 
 export default function ReputationPage() {
   const { address, isConnected } = useAccount();
   const [reputations, setReputations] = useState([]);
   const [userReputation, setUserReputation] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [errorMsg, setErrorMsg] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [tierFilter, setTierFilter] = useState('all');
 
@@ -38,14 +40,18 @@ export default function ReputationPage() {
   const fetchReputations = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${config.apiUrl}/api/reputation/leaderboard/top?limit=50`);
-      const data = await response.json();
+      setErrorMsg('');
+      const data = await fetchJson(`${config.apiUrl}/api/reputation/leaderboard/top?limit=50`);
       
       if (data.success) {
         setReputations(data.data);
       }
     } catch (error) {
       console.error('Error fetching reputations:', error);
+      const human = error instanceof ApiError
+        ? `${error.message}${error.status ? ` (HTTP ${error.status})` : ''}`
+        : 'Unexpected error while loading leaderboard';
+      setErrorMsg(human);
     } finally {
       setLoading(false);
     }
@@ -53,8 +59,7 @@ export default function ReputationPage() {
 
   const fetchUserReputation = async () => {
     try {
-      const response = await fetch(`/api/reputation/${address}`);
-      const data = await response.json();
+      const data = await fetchJson(`${config.apiUrl}/api/reputation/${address}`);
       
       if (data.success) {
         setUserReputation(data.data);
@@ -161,6 +166,13 @@ export default function ReputationPage() {
               <p className="text-gray-600 mt-2">Trust scores and community leaderboard</p>
             </div>
           </div>
+
+          {/* Error Banner */}
+          {errorMsg && (
+            <div className="mb-6 p-4 rounded-lg border border-red-200 bg-red-50 text-red-700">
+              {errorMsg}
+            </div>
+          )}
 
           {/* User Reputation Card */}
           {userReputation && (

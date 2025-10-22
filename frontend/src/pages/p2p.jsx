@@ -65,7 +65,7 @@ export default function P2PPage() {
 
   const cancelOrder = async (orderId) => {
     try {
-      const res = await fetch(`/api/p2p/orders/${orderId}/cancel`, { method: 'POST' });
+      const res = await fetch(`${config.apiUrl}/api/p2p/orders/${orderId}/cancel`, { method: 'POST' });
       const data = await res.json();
       if (data.success) fetchOrders();
     } catch {}

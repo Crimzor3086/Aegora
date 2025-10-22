@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import config from '../config/env';
+import { fetchJson, ApiError } from '../utils/http';
 import EscrowCard from '../components/EscrowCard';
 import ReputationBadge from '../components/ReputationBadge';
 
@@ -26,20 +27,18 @@ export default function Home() {
     totalUsers: 0,
     totalVolume: 0
   });
+  const [errorMsg, setErrorMsg] = useState('');
 
   useEffect(() => {
     // Fetch stats from API
     const fetchStats = async () => {
       try {
-        const [escrowRes, disputeRes, reputationRes] = await Promise.all([
-          fetch(`${config.apiUrl}/api/escrow/stats/overview`),
-          fetch(`${config.apiUrl}/api/disputes/stats/overview`),
-          fetch(`${config.apiUrl}/api/reputation/stats/overview`)
+        setErrorMsg('');
+        const [escrowData, disputeData, reputationData] = await Promise.all([
+          fetchJson(`${config.apiUrl}/api/escrow/stats/overview`),
+          fetchJson(`${config.apiUrl}/api/disputes/stats/overview`),
+          fetchJson(`${config.apiUrl}/api/reputation/stats/overview`)
         ]);
-
-        const escrowData = await escrowRes.json();
-        const disputeData = await disputeRes.json();
-        const reputationData = await reputationRes.json();
 
         setStats({
           totalEscrows: escrowData.data?.total || 0,
@@ -49,6 +48,10 @@ export default function Home() {
         });
       } catch (error) {
         console.error('Error fetching stats:', error);
+        const human = error instanceof ApiError
+          ? `${error.message}${error.status ? ` (HTTP ${error.status})` : ''}`
+          : 'Unexpected error while loading stats';
+        setErrorMsg(human);
       }
     };
 
@@ -134,6 +137,11 @@ export default function Home() {
         {/* Stats Section */}
         <section className="py-16 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            {errorMsg && (
+              <div className="mb-6 p-4 rounded-lg border border-red-200 bg-red-50 text-red-700">
+                {errorMsg}
+              </div>
+            )}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}

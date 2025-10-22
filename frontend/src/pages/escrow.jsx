@@ -69,7 +69,7 @@ export default function EscrowPage() {
 
   const handleConfirmEscrow = async (escrowId) => {
     try {
-      const response = await fetch(`/api/escrow/${escrowId}/confirm`, {
+      const response = await fetch(`${config.apiUrl}/api/escrow/${escrowId}/confirm`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -95,7 +95,7 @@ export default function EscrowPage() {
 
   const handleDisputeEscrow = async (escrowId) => {
     try {
-      const response = await fetch(`/api/escrow/${escrowId}/dispute`, {
+      const response = await fetch(`${config.apiUrl}/api/escrow/${escrowId}/dispute`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

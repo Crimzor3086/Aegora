@@ -95,7 +95,7 @@ export default function DisputesPage() {
 
   const checkJurorStatus = async () => {
     try {
-      const response = await fetch(`/api/jurors/${address}`);
+      const response = await fetch(`${config.apiUrl}/api/jurors/${address}`);
       if (!response.ok) return setCurrentJuror(null);
       const data = await response.json();
       
@@ -192,7 +192,7 @@ export default function DisputesPage() {
 
   const handleVote = async (disputeId, vote) => {
     try {
-      const response = await fetch(`/api/disputes/${disputeId}/vote`, {
+      const response = await fetch(`${config.apiUrl}/api/disputes/${disputeId}/vote`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
