@@ -38,7 +38,7 @@ export default function ReputationPage() {
   const fetchReputations = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/reputation/leaderboard/top?limit=50');
+      const response = await fetch(`${config.apiUrl}/api/reputation/leaderboard/top?limit=50`);
       const data = await response.json();
       
       if (data.success) {

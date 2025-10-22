@@ -33,7 +33,7 @@ export default function EscrowPage() {
     try {
       setLoading(true);
       setErrorMsg('');
-      const response = await fetch('/api/escrow');
+      const response = await fetch(`${config.apiUrl}/api/escrow`);
       if (!response.ok) {
         const text = await response.text();
         throw new Error(text || `Request failed with status ${response.status}`);
@@ -135,7 +135,7 @@ export default function EscrowPage() {
     const description = formData.get('description');
 
     try {
-      const response = await fetch('/api/escrow', {
+      const response = await fetch(`${config.apiUrl}/api/escrow`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
